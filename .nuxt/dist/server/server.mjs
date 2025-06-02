@@ -1,0 +1,1 @@
+export { default } from "file:///workspaces/nuxt/node_modules/.pnpm/@nuxt+vite-builder@3.17.4_@types+node@22.15.29_lightningcss@1.30.1_magicast@0.3.5_rollu_0c42ffdf6fc1cb3ee6ee2e938864cd41/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
