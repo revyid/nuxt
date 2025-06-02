@@ -95,6 +95,7 @@ declare global {
   const useAppConfig: typeof import('../../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/config')['useAppConfig']
   const useAsyncData: typeof import('../../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']
   const useAttrs: typeof import('vue')['useAttrs']
+  const useContactForm: typeof import('../../composables/useContactForm')['useContactForm']
   const useCookie: typeof import('../../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/composables/cookie')['useCookie']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
@@ -274,6 +275,7 @@ declare module 'vue' {
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useContactForm: UnwrapRef<typeof import('../../composables/useContactForm')['useContactForm']>
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>

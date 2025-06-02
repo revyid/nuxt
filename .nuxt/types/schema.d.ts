@@ -59,12 +59,22 @@ declare module 'nuxt/schema' {
       cdnURL: string,
    },
 
+   zohoSmtpHost: string,
+
+   zohoSmtpPort: string,
+
+   zohoEmail: string,
+
+   zohoPassword: string,
+
+   contactEmail: string,
+
    nitro: {
       envPrefix: string,
    },
   }
   interface PublicRuntimeConfig {
-
+   siteUrl: string,
   }
 }
 declare module 'vue' {

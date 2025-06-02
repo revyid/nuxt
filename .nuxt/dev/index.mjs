@@ -1,10 +1,11 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, createError, getRouterParam, getResponseStatusText } from 'file:///workspaces/nuxt/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, createError, getRouterParam, getMethod, getResponseStatusText } from 'file:///workspaces/nuxt/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
 import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///workspaces/nuxt/node_modules/.pnpm/@vue+shared@3.5.16/node_modules/@vue/shared/dist/shared.cjs.js';
+import nodemailer from 'file:///workspaces/nuxt/node_modules/.pnpm/nodemailer@7.0.3/node_modules/nodemailer/lib/nodemailer.js';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///workspaces/nuxt/node_modules/.pnpm/vue-bundle-renderer@2.1.1/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, joinRelativeURL } from 'file:///workspaces/nuxt/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
 import { renderToString } from 'file:///workspaces/nuxt/node_modules/.pnpm/vue@3.5.16_typescript@5.8.3/node_modules/vue/server-renderer/index.mjs';
@@ -644,7 +645,14 @@ const _inlineRuntimeConfig = {
       }
     }
   },
-  "public": {}
+  "public": {
+    "siteUrl": "http://localhost:3000"
+  },
+  "zohoSmtpHost": "",
+  "zohoSmtpPort": "",
+  "zohoEmail": "",
+  "zohoPassword": "",
+  "contactEmail": ""
 };
 const envOptions = {
   prefix: "NITRO_",
@@ -1427,9 +1435,11 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_LsT7cR = () => Promise.resolve().then(function () { return sendEmail_post$1; });
 const _lazy__X800q = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
+  { route: '/api/send-email', handler: _lazy_LsT7cR, lazy: true, middleware: false, method: "post" },
   { route: '/__nuxt_error', handler: _lazy__X800q, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy__X800q, lazy: true, middleware: false, method: undefined }
@@ -1758,6 +1768,115 @@ const styles = {};
 const styles$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: styles
+});
+
+const sendEmail_post = defineEventHandler(async (event) => {
+  try {
+    if (getMethod(event) !== "POST") {
+      throw createError({
+        statusCode: 405,
+        statusMessage: "Method Not Allowed"
+      });
+    }
+    const body = await readBody(event);
+    if (!body.from || !body.to || !body.subject || !body.html) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Missing required fields"
+      });
+    }
+    const config = useRuntimeConfig();
+    const {
+      zohoSmtpHost = "smtp.zoho.com",
+      zohoSmtpPort = 587,
+      zohoEmail,
+      zohoPassword,
+      contactEmail
+    } = config;
+    if (!zohoEmail || !zohoPassword) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: "Email configuration missing"
+      });
+    }
+    const transporter = nodemailer.createTransporter({
+      host: zohoSmtpHost,
+      port: parseInt(zohoSmtpPort),
+      secure: false,
+      // true for 465, false for other ports
+      auth: {
+        user: zohoEmail,
+        pass: zohoPassword
+      },
+      tls: {
+        ciphers: "SSLv3",
+        rejectUnauthorized: false
+      }
+    });
+    await transporter.verify();
+    const mailOptions = {
+      from: `"Portfolio Contact" <${zohoEmail}>`,
+      to: contactEmail || body.to,
+      subject: body.subject,
+      html: body.html,
+      text: body.text,
+      replyTo: body.replyTo,
+      // Add headers for better deliverability
+      headers: {
+        "X-Mailer": "Portfolio Contact Form",
+        "X-Priority": "3"
+      }
+    };
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully:", {
+      messageId: info.messageId,
+      response: info.response,
+      accepted: info.accepted,
+      rejected: info.rejected
+    });
+    return {
+      success: true,
+      messageId: info.messageId
+    };
+  } catch (error) {
+    console.error("Email sending failed:", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : void 0
+    });
+    if (error instanceof Error) {
+      if (error.message.includes("Authentication failed")) {
+        return {
+          success: false,
+          error: "Email authentication failed. Please check credentials."
+        };
+      }
+      if (error.message.includes("Invalid login")) {
+        return {
+          success: false,
+          error: "Invalid email credentials."
+        };
+      }
+      if (error.message.includes("Connection timeout")) {
+        return {
+          success: false,
+          error: "Email server connection timeout. Please try again."
+        };
+      }
+      return {
+        success: false,
+        error: "Failed to send email. Please try again later."
+      };
+    }
+    return {
+      success: false,
+      error: "An unexpected error occurred."
+    };
+  }
+});
+
+const sendEmail_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: sendEmail_post
 });
 
 function renderPayloadResponse(ssrContext) {
