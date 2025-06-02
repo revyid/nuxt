@@ -61,7 +61,7 @@
   >
     <div 
       v-if="isChatOpen"
-      class="fixed bottom-24 right-6 z-[90] w-80 sm:w-96 h-[32rem] max-h-[80vh]"
+      class="fixed top-24 left-1/2 -translate-x-1/2 z-[90] w-80 sm:w-96 h-[32rem] max-h-[80vh]"
     >
       <!-- Chat Window -->
       <div 

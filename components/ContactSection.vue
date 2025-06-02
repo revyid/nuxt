@@ -1,20 +1,34 @@
 <template>
-  <section id="contact" class="py-20 px-6 relative">
-    <div class="max-w-4xl mx-auto">
+  <section id="contact" class="py-20 px-6 relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="floating-orb floating-orb-1"></div>
+      <div class="floating-orb floating-orb-2"></div>
+      <div class="floating-orb floating-orb-3"></div>
+      <div class="grid-pattern"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto relative z-10">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">
-          Get In <span class="text-[#42b883]">Touch</span>
+      <div class="text-center mb-16 animate-fade-in-up">
+        <div class="inline-block mb-4">
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring pulse-ring-delay-1"></div>
+          <div class="pulse-ring pulse-ring-delay-2"></div>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white typing-effect">
+          Get In <span class="text-[#42b883] glow-text">Touch</span>
         </h2>
-        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto slide-in-text">
           Have a project in mind? Let's work together to create something amazing.
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <!-- Contact Info -->
-        <div class="opacity-0 animate-fade-in-left animate-delay-100">
-          <h3 class="text-2xl font-bold text-white mb-6">Let's Talk</h3>
+        <div class="contact-info-card">
+          <div class="card-glow"></div>
+          <h3 class="text-2xl font-bold text-white mb-6 shimmer-text">Let's Talk</h3>
           <p class="text-gray-400 mb-8 leading-relaxed">
             I'm always interested in hearing about new opportunities and exciting projects. Whether
             you have a question or just want to say hi, I'll try my best to get back to you!
@@ -22,179 +36,139 @@
 
           <!-- Contact Methods -->
           <div class="space-y-6">
-            <div class="flex items-center space-x-4 group">
-              <div
-                class="w-12 h-12 bg-[#42b883]/20 rounded-full flex items-center justify-center group-hover:bg-[#42b883]/30 transition-colors"
-              >
-                <svg
-                  class="w-6 h-6 text-[#42b883]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
+            <div class="contact-item" v-for="(item, index) in contactMethods" :key="index" 
+                 :style="{ animationDelay: `${index * 0.2}s` }">
+              <div class="contact-icon-wrapper">
+                <div class="contact-icon">
+                  <component :is="item.icon" class="w-6 h-6 text-[#42b883]" />
+                </div>
+                <div class="icon-ripple"></div>
               </div>
               <div>
-                <h4 class="font-semibold text-white">Email</h4>
-                <p class="text-gray-400">alex@example.com</p>
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-4 group">
-              <div
-                class="w-12 h-12 bg-[#42b883]/20 rounded-full flex items-center justify-center group-hover:bg-[#42b883]/30 transition-colors"
-              >
-                <svg
-                  class="w-6 h-6 text-[#42b883]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-semibold text-white">Location</h4>
-                <p class="text-gray-400">Jakarta, Indonesia</p>
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-4 group">
-              <div
-                class="w-12 h-12 bg-[#42b883]/20 rounded-full flex items-center justify-center group-hover:bg-[#42b883]/30 transition-colors"
-              >
-                <svg
-                  class="w-6 h-6 text-[#42b883]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-semibold text-white">Response Time</h4>
-                <p class="text-gray-400">Within 24 hours</p>
+                <h4 class="font-semibold text-white">{{ item.title }}</h4>
+                <p class="text-gray-400">{{ item.value }}</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Contact Form -->
-        <div class="opacity-0 animate-fade-in-right animate-delay-200">
+        <div class="contact-form-card">
+          <div class="form-glow"></div>
           <form @submit.prevent="handleSubmit" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+              <div class="input-group" :class="{ 'focused': focusedField === 'name' }">
+                <label for="name" class="input-label">Name</label>
                 <input
                   id="name"
                   v-model="form.name"
                   type="text"
                   required
-                  class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#42b883] focus:ring-1 focus:ring-[#42b883] transition-all duration-300"
+                  @focus="focusedField = 'name'"
+                  @blur="focusedField = ''"
+                  class="custom-input"
                   placeholder="Your Name"
                 />
+                <div class="input-line"></div>
               </div>
-              <div>
-                <label for="email" class="block text-sm font-medium text-gray-300 mb-2"
-                  >Email</label
-                >
+              <div class="input-group" :class="{ 'focused': focusedField === 'email' }">
+                <label for="email" class="input-label">Email</label>
                 <input
                   id="email"
                   v-model="form.email"
                   type="email"
                   required
-                  class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#42b883] focus:ring-1 focus:ring-[#42b883] transition-all duration-300"
+                  @focus="focusedField = 'email'"
+                  @blur="focusedField = ''"
+                  class="custom-input"
                   placeholder="your@email.com"
                 />
+                <div class="input-line"></div>
               </div>
             </div>
 
-            <div>
-              <label for="subject" class="block text-sm font-medium text-gray-300 mb-2"
-                >Subject</label
-              >
+            <div class="input-group" :class="{ 'focused': focusedField === 'subject' }">
+              <label for="subject" class="input-label">Subject</label>
               <input
                 id="subject"
                 v-model="form.subject"
                 type="text"
                 required
-                class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#42b883] focus:ring-1 focus:ring-[#42b883] transition-all duration-300"
+                @focus="focusedField = 'subject'"
+                @blur="focusedField = ''"
+                class="custom-input"
                 placeholder="Project Discussion"
               />
+              <div class="input-line"></div>
             </div>
 
-            <div>
-              <label for="message" class="block text-sm font-medium text-gray-300 mb-2"
-                >Message</label
-              >
+            <div class="input-group" :class="{ 'focused': focusedField === 'message' }">
+              <label for="message" class="input-label">Message</label>
               <textarea
                 id="message"
                 v-model="form.message"
                 rows="6"
                 required
-                class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#42b883] focus:ring-1 focus:ring-[#42b883] transition-all duration-300 resize-none"
+                @focus="focusedField = 'message'"
+                @blur="focusedField = ''"
+                class="custom-input resize-none"
                 placeholder="Tell me about your project..."
               ></textarea>
+              <div class="input-line"></div>
             </div>
 
             <button
               type="submit"
               :disabled="isSubmitting"
-              class="w-full px-8 py-4 bg-[#42b883] text-white rounded-lg font-medium hover:bg-[#369870] transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#42b883]/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              class="submit-button"
+              :class="{ 'submitting': isSubmitting }"
             >
-              <span v-if="!isSubmitting">Send Message</span>
-              <span v-else class="flex items-center justify-center space-x-2">
-                <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                    fill="none"
-                  />
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                <span>Sending...</span>
-              </span>
+              <div class="button-content">
+                <span v-if="!isSubmitting" class="button-text">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                  </svg>
+                  Send Message
+                </span>
+                <span v-else class="button-text">
+                  <div class="loading-spinner"></div>
+                  Sending...
+                </span>
+              </div>
+              <div class="button-ripple"></div>
             </button>
           </form>
 
           <!-- Success Message -->
-          <div
-            v-if="showSuccess"
-            class="mt-6 p-4 bg-[#42b883]/20 border border-[#42b883]/50 rounded-lg text-[#42b883] text-center"
-          >
-            Thanks for your message! I'll get back to you soon.
-          </div>
+          <Transition name="success">
+            <div v-if="showSuccess" class="success-message">
+              <div class="success-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold">Message Sent Successfully!</h4>
+                <p class="text-sm opacity-90">Thanks for reaching out. I'll get back to you within 24 hours.</p>
+              </div>
+            </div>
+          </Transition>
+
+          <!-- Error Message -->
+          <Transition name="error">
+            <div v-if="showError" class="error-message">
+              <div class="error-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold">Failed to Send Message</h4>
+                <p class="text-sm opacity-90">{{ errorMessage }}</p>
+              </div>
+            </div>
+          </Transition>
         </div>
       </div>
     </div>
@@ -202,8 +176,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 
+// Contact methods data
+const contactMethods = [
+  {
+    title: 'Email',
+    value: 'alex@example.com',
+    icon: 'IconMail'
+  },
+  {
+    title: 'Location',
+    value: 'Jakarta, Indonesia',
+    icon: 'IconMapPin'
+  },
+  {
+    title: 'Response Time',
+    value: 'Within 24 hours',
+    icon: 'IconClock'
+  }
+]
+
+// Form reactive data
 const form = reactive({
   name: '',
   email: '',
@@ -211,26 +205,626 @@ const form = reactive({
   message: '',
 })
 
+// Component state
 const isSubmitting = ref(false)
 const showSuccess = ref(false)
+const showError = ref(false)
+const errorMessage = ref('')
+const focusedField = ref('')
 
+// Email configuration from environment
+const emailConfig = {
+  host: process.env.ZOHO_SMTP_HOST || 'smtp.zoho.com',
+  port: process.env.ZOHO_SMTP_PORT || 587,
+  user: process.env.ZOHO_EMAIL,
+  pass: process.env.ZOHO_PASSWORD,
+  to: process.env.CONTACT_EMAIL || 'alex@example.com'
+}
+
+// Form validation
+const isFormValid = computed(() => {
+  return form.name.trim() && 
+         form.email.trim() && 
+         form.subject.trim() && 
+         form.message.trim() &&
+         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+})
+
+// Email HTML template
+const generateEmailHTML = (formData: typeof form) => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Contact Form Message</title>
+      <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #42b883 0%, #369870 100%); padding: 30px; text-align: center; }
+        .header h1 { color: white; margin: 0; font-size: 24px; font-weight: 600; }
+        .content { padding: 30px; }
+        .field { margin-bottom: 20px; }
+        .field-label { font-weight: 600; color: #374151; margin-bottom: 5px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .field-value { background: #f9fafb; padding: 15px; border-radius: 8px; border-left: 4px solid #42b883; }
+        .message-content { background: #f0f9ff; padding: 20px; border-radius: 8px; border: 1px solid #e0f2fe; line-height: 1.6; }
+        .footer { background: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb; }
+        .footer p { margin: 0; color: #6b7280; font-size: 14px; }
+        .timestamp { color: #9ca3af; font-size: 12px; margin-top: 10px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>📧 New Contact Form Message</h1>
+        </div>
+        <div class="content">
+          <div class="field">
+            <div class="field-label">👤 From</div>
+            <div class="field-value"><strong>${formData.name}</strong> &lt;${formData.email}&gt;</div>
+          </div>
+          <div class="field">
+            <div class="field-label">📋 Subject</div>
+            <div class="field-value">${formData.subject}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">💬 Message</div>
+            <div class="message-content">${formData.message.replace(/\n/g, '<br>')}</div>
+          </div>
+          <div class="timestamp">
+            📅 Received: ${new Date().toLocaleString('en-US', { 
+              timeZone: 'Asia/Jakarta',
+              dateStyle: 'full',
+              timeStyle: 'medium'
+            })}
+          </div>
+        </div>
+        <div class="footer">
+          <p>This message was sent from your portfolio contact form.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+}
+
+// Handle form submission
 const handleSubmit = async () => {
+  if (!isFormValid.value) return
+
   isSubmitting.value = true
+  showError.value = false
+  errorMessage.value = ''
 
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  try {
+    // Send email using Zoho Mail
+    const response = await $fetch('/api/send-email', {
+      method: 'POST',
+      body: {
+        from: `"${form.name}" <${emailConfig.user}>`,
+        to: emailConfig.to,
+        subject: `Portfolio Contact: ${form.subject}`,
+        html: generateEmailHTML(form),
+        text: `
+Name: ${form.name}
+Email: ${form.email}
+Subject: ${form.subject}
+Message: ${form.message}
 
-  // Reset form
-  Object.keys(form).forEach((key) => {
-    form[key as keyof typeof form] = ''
-  })
+Sent from Portfolio Contact Form
+        `,
+        replyTo: form.email
+      }
+    })
 
-  isSubmitting.value = false
-  showSuccess.value = true
+    if (response.success) {
+      // Reset form
+      Object.keys(form).forEach((key) => {
+        form[key as keyof typeof form] = ''
+      })
 
-  // Hide success message after 5 seconds
-  setTimeout(() => {
-    showSuccess.value = false
-  }, 5000)
+      showSuccess.value = true
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        showSuccess.value = false
+      }, 5000)
+    } else {
+      throw new Error(response.error || 'Failed to send email')
+    }
+  } catch (error) {
+    console.error('Email sending failed:', error)
+    errorMessage.value = error instanceof Error ? error.message : 'Network error occurred'
+    showError.value = true
+    
+    // Hide error message after 5 seconds
+    setTimeout(() => {
+      showError.value = false
+    }, 5000)
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+// Icon components (you can replace with your preferred icon library)
+const IconMail = {
+  template: `
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+    </svg>
+  `
+}
+
+const IconMapPin = {
+  template: `
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+  `
+}
+
+const IconClock = {
+  template: `
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+  `
 }
 </script>
+
+<style scoped>
+/* Floating Background Elements */
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #42b883, #369870);
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-orb-1 {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: -5%;
+  animation-delay: 0s;
+}
+
+.floating-orb-2 {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  right: -5%;
+  animation-delay: 2s;
+}
+
+.floating-orb-3 {
+  width: 100px;
+  height: 100px;
+  bottom: 20%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(66, 184, 131, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(66, 184, 131, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
+}
+
+/* Pulse Ring Animation */
+.pulse-ring {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 2px solid #42b883;
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+.pulse-ring-delay-1 {
+  animation-delay: 0.33s;
+}
+
+.pulse-ring-delay-2 {
+  animation-delay: 0.66s;
+}
+
+/* Text Animations */
+.glow-text {
+  text-shadow: 0 0 20px rgba(66, 184, 131, 0.5);
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #fff 25%, #42b883 50%, #fff 75%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 3s steps(12) 1s both;
+}
+
+.slide-in-text {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slide-in 1s ease-out 2s both;
+}
+
+/* Card Animations */
+.contact-info-card, .contact-form-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  transition: all 0.3s ease;
+}
+
+.contact-info-card:hover, .contact-form-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(66, 184, 131, 0.1);
+}
+
+.card-glow, .form-glow {
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(45deg, #42b883, transparent, #42b883);
+  border-radius: 20px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.contact-info-card:hover .card-glow,
+.contact-form-card:hover .form-glow {
+  opacity: 0.3;
+}
+
+/* Contact Items */
+.contact-item {
+  display: flex;
+  align-items: center;
+  space-x: 1rem;
+  padding: 15px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slide-in-left 0.6s ease-out both;
+}
+
+.contact-item:hover {
+  background: rgba(66, 184, 131, 0.1);
+  transform: translateX(10px);
+}
+
+.contact-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(66, 184, 131, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-item:hover .contact-icon {
+  background: rgba(66, 184, 131, 0.3);
+  transform: scale(1.1);
+}
+
+.icon-ripple {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(66, 184, 131, 0.3);
+  opacity: 0;
+  transform: scale(0);
+  animation: ripple 2s infinite;
+}
+
+/* Form Styling */
+.input-group {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #d1d5db;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.input-group.focused .input-label {
+  color: #42b883;
+  transform: translateY(-2px);
+}
+
+.custom-input {
+  width: 100%;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.custom-input:focus {
+  outline: none;
+  border-color: #42b883;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(66, 184, 131, 0.2);
+}
+
+.custom-input::placeholder {
+  color: #9ca3af;
+}
+
+.input-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, #42b883, #369870);
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+.input-group.focused .input-line {
+  width: 100%;
+}
+
+/* Submit Button */
+.submit-button {
+  position: relative;
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(45deg, #42b883, #369870);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(66, 184, 131, 0.4);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.button-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-text {
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.button-ripple {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.submit-button:hover .button-ripple {
+  transform: translateX(100%);
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: spin 1s linear infinite;
+}
+
+/* Success/Error Messages */
+.success-message, .error-message {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 24px;
+  animation: bounce-in 0.5s ease-out;
+}
+
+.success-message {
+  background: rgba(66, 184, 131, 0.1);
+  border: 1px solid rgba(66, 184, 131, 0.3);
+  color: #42b883;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.success-icon, .error-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.success-icon {
+  background: rgba(66, 184, 131, 0.2);
+}
+
+.error-icon {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(120deg); }
+  66% { transform: translateY(10px) rotate(240deg); }
+}
+
+@keyframes grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  0% { text-shadow: 0 0 20px rgba(66, 184, 131, 0.5); }
+  100% { text-shadow: 0 0 30px rgba(66, 184, 131, 0.8), 0 0 40px rgba(66, 184, 131, 0.3); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes slide-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Transitions */
+.success-enter-active, .success-leave-active,
+.error-enter-active, .error-leave-active {
+  transition: all 0.5s ease;
+}
+
+.success-enter-from, .success-leave-to,
+.error-enter-from, .error-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .floating-orb { display: none; }
+  
+  .contact-info-card, .contact-form-card {
+    padding: 20px;
+  }
+  
+  .contact-item {
+    padding: 12px;
+  }
+  
+  .custom-input {
+    padding: 14px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .submit-button {
+    padding: 14px 24px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Performance Optimizations */
+.contact-info-card, .contact-form-card {
+  will-change: transform;
+}
+
+.floating-orb {
+  will-change: transform;
+}
+
+.custom-input:focus {
+  will-change: box-shadow, border-color;
+}
+</style>
