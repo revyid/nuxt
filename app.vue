@@ -24,7 +24,6 @@ import ProjectsSection from './components/ProjectsSection.vue'
 import SkillsSection from './components/SkillsSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import AppFooter from './components/AppFooter.vue'
-import './main.css'
 onMounted(() => {
   // Initialize AOS or any other animations
   if (typeof window !== 'undefined') {

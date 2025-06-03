@@ -41,7 +41,7 @@
       <div class="opacity-0 animate-fade-in-up animate-delay-100">
         <h1 class="text-6xl md:text-8xl font-bold mb-6 relative group cursor-default">
           <span 
-            class="bg-gradient-to-r from-white via-gray-200 to-[#42b883] bg-clip-text text-transparent animate-gradient-x bg-300% relative z-10"
+            class="bg-gradient-to-r from-white via-gray-200 to-[#42b883] bg-clip-text text-transparent animate-gradient-x bg-300ptc relative z-10"
             @mouseenter="startTextAnimation"
           >
             {{ displayText }}
@@ -373,7 +373,7 @@ onUnmounted(() => {
 .animate-spin-slow { animation: spin-slow 3s linear infinite; }
 .animate-bounce-once { animation: bounce-once 0.6s ease-in-out; }
 
-.bg-300% { background-size: 300% 300%; }
+.bg-300ptc { background-size: 300% 300%; }
 .bg-gradient-radial {
   background: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
