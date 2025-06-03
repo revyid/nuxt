@@ -390,7 +390,7 @@ const sendMessage = async () => {
         'X-Title': 'Portfolio AI Assistant'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat:free',
+        model: 'deepseek/deepseek-r1:free',
         messages,
         temperature: 0.7,
         max_tokens: 1200,
