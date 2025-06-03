@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://revy.my.id/asset/banner.png" alt="Banner" />
+  <img src="https://revy.my.id/banner.png" alt="Banner" />
 </p>
 
 <h1 align="center">Hi, I'm Revy</h1>
