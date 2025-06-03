@@ -32,7 +32,7 @@
 ## ✨ Preview
 
 <p align="center">
-  <img src="https://revy.my.id/asset/preview.png" alt="Preview" />
+  <img src="https://revy.my.id/preview.png" alt="Preview" />
 </p>
 
 ---
