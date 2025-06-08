@@ -69,12 +69,30 @@ declare module 'nuxt/schema' {
 
    contactEmail: string,
 
+   authSecret: string,
+
+   googleClientId: string,
+
+   googleClientSecret: string,
+
+   githubClientId: string,
+
+   githubClientSecret: string,
+
+   discordClientId: string,
+
+   discordClientSecret: string,
+
+   databaseUrl: string,
+
    nitro: {
       envPrefix: string,
    },
   }
   interface PublicRuntimeConfig {
    siteUrl: string,
+
+   authUrl: string,
   }
 }
 declare module 'vue' {

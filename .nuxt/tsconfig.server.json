@@ -94,6 +94,9 @@
       "#internal/nuxt/paths": [
         "../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/core/runtime/nitro/utils/paths"
       ],
+      "#auth": [
+        "./@sidebase/nuxt-auth"
+      ],
       "#unhead/composables": [
         "../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/head/runtime/composables/v3"
       ]

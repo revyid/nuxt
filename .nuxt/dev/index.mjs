@@ -5,7 +5,12 @@ import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///workspaces/nuxt/node_modules/.pnpm/@vue+shared@3.5.16/node_modules/@vue/shared/dist/shared.cjs.js';
+import GoogleProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.24.11_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@1_33484ddf45ac2d270f1d23035791ff97/node_modules/next-auth/providers/google.js';
+import GitHubProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.24.11_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@1_33484ddf45ac2d270f1d23035791ff97/node_modules/next-auth/providers/github.js';
+import DiscordProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.24.11_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@1_33484ddf45ac2d270f1d23035791ff97/node_modules/next-auth/providers/discord.js';
+import { NuxtAuthHandler, getServerSession } from 'file:///workspaces/nuxt/node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.24.11_next@15.3.3_@babel+core@7.2_05c5ab5d21372ce03594b61685a3c0b1/node_modules/@sidebase/nuxt-auth/dist/module.mjs';
 import nodemailer from 'file:///workspaces/nuxt/node_modules/.pnpm/nodemailer@7.0.3/node_modules/nodemailer/lib/nodemailer.js';
+import { Pool } from 'file:///workspaces/nuxt/node_modules/.pnpm/pg@8.16.0/node_modules/pg/esm/index.mjs';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///workspaces/nuxt/node_modules/.pnpm/vue-bundle-renderer@2.1.1/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, joinRelativeURL } from 'file:///workspaces/nuxt/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
 import { renderToString } from 'file:///workspaces/nuxt/node_modules/.pnpm/vue@3.5.16_typescript@5.8.3/node_modules/vue/server-renderer/index.mjs';
@@ -646,13 +651,22 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {
-    "siteUrl": "http://localhost:3000"
+    "siteUrl": "http://localhost:3000",
+    "authUrl": "http://localhost:3000/api/auth"
   },
   "zohoSmtpHost": "",
   "zohoSmtpPort": "",
   "zohoEmail": "",
   "zohoPassword": "",
-  "contactEmail": ""
+  "contactEmail": "",
+  "authSecret": "",
+  "googleClientId": "",
+  "googleClientSecret": "",
+  "githubClientId": "",
+  "githubClientSecret": "",
+  "discordClientId": "",
+  "discordClientSecret": "",
+  "databaseUrl": ""
 };
 const envOptions = {
   prefix: "NITRO_",
@@ -1435,11 +1449,17 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_JcOw6w = () => Promise.resolve().then(function () { return _____$1; });
 const _lazy_LsT7cR = () => Promise.resolve().then(function () { return sendEmail_post$1; });
+const _lazy_c9oTys = () => Promise.resolve().then(function () { return profile_get$1; });
+const _lazy_31SSr8 = () => Promise.resolve().then(function () { return refresh_post$1; });
 const _lazy__X800q = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
+  { route: '/api/auth/**', handler: _lazy_JcOw6w, lazy: true, middleware: false, method: undefined },
   { route: '/api/send-email', handler: _lazy_LsT7cR, lazy: true, middleware: false, method: "post" },
+  { route: '/api/user/profile', handler: _lazy_c9oTys, lazy: true, middleware: false, method: "get" },
+  { route: '/api/user/refresh', handler: _lazy_31SSr8, lazy: true, middleware: false, method: "post" },
   { route: '/__nuxt_error', handler: _lazy__X800q, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy__X800q, lazy: true, middleware: false, method: undefined }
@@ -1770,6 +1790,178 @@ const styles$1 = /*#__PURE__*/Object.freeze({
   default: styles
 });
 
+const pool = new Pool({
+  connectionString: useRuntimeConfig().databaseUrl,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+class UserService {
+  static async findUserByEmail(email) {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+      );
+      return result.rows[0] || null;
+    } finally {
+      client.release();
+    }
+  }
+  static async findUserByProvider(provider, providerId) {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        "SELECT * FROM users WHERE provider = $1 AND provider_id = $2",
+        [provider, providerId]
+      );
+      return result.rows[0] || null;
+    } finally {
+      client.release();
+    }
+  }
+  static async createUser(profile) {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(`
+        INSERT INTO users (email, username, avatar_url, provider, provider_id, updated_at)
+        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+        RETURNING *
+      `, [
+        profile.email,
+        profile.username,
+        profile.avatar_url,
+        profile.provider,
+        profile.provider_id
+      ]);
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  }
+  static async updateUser(email, updates) {
+    const client = await pool.connect();
+    try {
+      const setClause = [];
+      const values = [];
+      let paramIndex = 1;
+      if (updates.username) {
+        setClause.push(`username = $${paramIndex++}`);
+        values.push(updates.username);
+      }
+      if (updates.avatar_url !== void 0) {
+        setClause.push(`avatar_url = $${paramIndex++}`);
+        values.push(updates.avatar_url);
+      }
+      if (setClause.length === 0) {
+        throw new Error("No updates provided");
+      }
+      setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+      values.push(email);
+      const result = await client.query(`
+        UPDATE users 
+        SET ${setClause.join(", ")}
+        WHERE email = $${paramIndex}
+        RETURNING *
+      `, values);
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  }
+  static async validateEmailAvailability(email, provider) {
+    const existingUser = await this.findUserByEmail(email);
+    if (!existingUser) {
+      return { available: true };
+    }
+    if (existingUser.provider === provider) {
+      return { available: true };
+    }
+    return {
+      available: false,
+      conflictProvider: existingUser.provider
+    };
+  }
+}
+
+const _____ = NuxtAuthHandler({
+  secret: useRuntimeConfig().authSecret,
+  providers: [
+    GoogleProvider({
+      clientId: useRuntimeConfig().googleClientId,
+      clientSecret: useRuntimeConfig().googleClientSecret
+    }),
+    GitHubProvider({
+      clientId: useRuntimeConfig().githubClientId,
+      clientSecret: useRuntimeConfig().githubClientSecret
+    }),
+    DiscordProvider({
+      clientId: useRuntimeConfig().discordClientId,
+      clientSecret: useRuntimeConfig().discordClientSecret
+    })
+  ],
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (!account || !profile || !user.email) return false;
+      const provider = account.provider;
+      const providerId = account.providerAccountId;
+      const emailCheck = await UserService.validateEmailAvailability(user.email, provider);
+      if (!emailCheck.available) {
+        throw new Error(`Email sudah terdaftar dengan provider ${emailCheck.conflictProvider}`);
+      }
+      let username = user.name || user.email.split("@")[0];
+      let avatarUrl = user.image || null;
+      if (provider === "discord") {
+        username = profile.username || username;
+        avatarUrl = profile.avatar ? `https://cdn.discordapp.com/avatars/${providerId}/${profile.avatar}.png` : avatarUrl;
+      } else if (provider === "github") {
+        username = profile.login || username;
+        avatarUrl = profile.avatar_url || avatarUrl;
+      }
+      const oauthProfile = {
+        email: user.email,
+        username,
+        avatar_url: avatarUrl,
+        provider,
+        provider_id: providerId
+      };
+      const existingUser = await UserService.findUserByProvider(provider, providerId);
+      if (existingUser) {
+        await UserService.updateUser(user.email, {
+          username: oauthProfile.username,
+          avatar_url: oauthProfile.avatar_url
+        });
+      } else {
+        await UserService.createUser(oauthProfile);
+      }
+      return true;
+    },
+    async session({ session, token }) {
+      var _a;
+      if ((_a = session.user) == null ? void 0 : _a.email) {
+        const user = await UserService.findUserByEmail(session.user.email);
+        if (user) {
+          session.user.username = user.username;
+          session.user.image = user.avatar_url;
+          session.user.provider = user.provider;
+        }
+      }
+      return session;
+    }
+  },
+  pages: {
+    signIn: "/auth/signin",
+    error: "/auth/error"
+  }
+});
+
+const _____$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: _____
+});
+
 const sendEmail_post = defineEventHandler(async (event) => {
   try {
     if (getMethod(event) !== "POST") {
@@ -1877,6 +2069,69 @@ const sendEmail_post = defineEventHandler(async (event) => {
 const sendEmail_post$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: sendEmail_post
+});
+
+const profile_get = defineEventHandler(async (event) => {
+  var _a;
+  const session = await getServerSession(event);
+  if (!((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.email)) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized"
+    });
+  }
+  const user = await UserService.findUserByEmail(session.user.email);
+  if (!user) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found"
+    });
+  }
+  return {
+    email: user.email,
+    username: user.username,
+    avatar_url: user.avatar_url,
+    provider: user.provider,
+    created_at: user.created_at,
+    updated_at: user.updated_at
+  };
+});
+
+const profile_get$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: profile_get
+});
+
+const refresh_post = defineEventHandler(async (event) => {
+  var _a;
+  const session = await getServerSession(event);
+  if (!((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.email)) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized"
+    });
+  }
+  const user = await UserService.findUserByEmail(session.user.email);
+  if (!user) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found"
+    });
+  }
+  return {
+    message: "Profile refreshed successfully",
+    user: {
+      email: user.email,
+      username: user.username,
+      avatar_url: user.avatar_url,
+      provider: user.provider
+    }
+  };
+});
+
+const refresh_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: refresh_post
 });
 
 function renderPayloadResponse(ssrContext) {
