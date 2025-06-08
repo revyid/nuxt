@@ -1,23 +1,25 @@
 // server/api/auth/[...].ts
 import type { AuthConfig } from '@auth/core/types'
-import GoogleProvider from 'next-auth/providers/google'
-import GitHubProvider from 'next-auth/providers/github'
-import DiscordProvider from 'next-auth/providers/discord'
 import { NuxtAuthHandler } from '#auth'
 import { UserService, type OAuthProfile } from '~/server/services/userService'
+
+// Import providers from @auth/core for Nuxt 3 compatibility
+import Google from '@auth/core/providers/google'
+import GitHub from '@auth/core/providers/github'
+import Discord from '@auth/core/providers/discord'
 
 export default NuxtAuthHandler({
   secret: useRuntimeConfig().authSecret,
   providers: [
-    GoogleProvider({
+    Google({
       clientId: useRuntimeConfig().googleClientId,
       clientSecret: useRuntimeConfig().googleClientSecret,
     }),
-    GitHubProvider({
+    GitHub({
       clientId: useRuntimeConfig().githubClientId,
       clientSecret: useRuntimeConfig().githubClientSecret,
     }),
-    DiscordProvider({
+    Discord({
       clientId: useRuntimeConfig().discordClientId,
       clientSecret: useRuntimeConfig().discordClientSecret,
     })
