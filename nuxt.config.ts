@@ -5,14 +5,24 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   css: ['/main.css'],
+  
+  modules: [
+    '@sidebase/nuxt-auth'
+  ],
+  
   vite: {
     plugins: [
       tailwindcss(),
     ],
   },
-  alias: {
-    '#auth': '@sidebase/nuxt-auth'
+  
+  auth: {
+    baseURL: process.env.AUTH_ORIGIN,
+    provider: {
+      type: 'authjs'
+    }
   },
+  
   runtimeConfig: {
     // Private keys (only available on server-side)
     zohoSmtpHost: process.env.ZOHO_SMTP_HOST,

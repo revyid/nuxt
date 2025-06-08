@@ -1,18 +1,19 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, createError, getRouterParam, getMethod, getResponseStatusText } from 'file:///workspaces/nuxt/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, getResponseStatus, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, getHeaders, parseCookies, isMethod, setCookie, getMethod, getResponseStatusText } from 'file:///workspaces/nuxt/node_modules/.pnpm/h3@1.15.3/node_modules/h3/dist/index.mjs';
 import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///workspaces/nuxt/node_modules/.pnpm/@vue+shared@3.5.16/node_modules/@vue/shared/dist/shared.cjs.js';
-import GoogleProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.24.11_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@1_33484ddf45ac2d270f1d23035791ff97/node_modules/next-auth/providers/google.js';
-import GitHubProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.24.11_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@1_33484ddf45ac2d270f1d23035791ff97/node_modules/next-auth/providers/github.js';
-import DiscordProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.24.11_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@1_33484ddf45ac2d270f1d23035791ff97/node_modules/next-auth/providers/discord.js';
-import { NuxtAuthHandler, getServerSession } from 'file:///workspaces/nuxt/node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.24.11_next@15.3.3_@babel+core@7.2_05c5ab5d21372ce03594b61685a3c0b1/node_modules/@sidebase/nuxt-auth/dist/module.mjs';
+import GoogleProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.21.1_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@19_f0bdd1178131c270726f266f21a0a903/node_modules/next-auth/providers/google.js';
+import GitHubProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.21.1_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@19_f0bdd1178131c270726f266f21a0a903/node_modules/next-auth/providers/github.js';
+import DiscordProvider from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.21.1_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@19_f0bdd1178131c270726f266f21a0a903/node_modules/next-auth/providers/discord.js';
 import nodemailer from 'file:///workspaces/nuxt/node_modules/.pnpm/nodemailer@7.0.3/node_modules/nodemailer/lib/nodemailer.js';
 import { Pool } from 'file:///workspaces/nuxt/node_modules/.pnpm/pg@8.16.0/node_modules/pg/esm/index.mjs';
+import { AuthHandler } from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.21.1_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@19_f0bdd1178131c270726f266f21a0a903/node_modules/next-auth/core/index.js';
+import defu, { defuFn, defu as defu$1 } from 'file:///workspaces/nuxt/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, withLeadingSlash, joinRelativeURL } from 'file:///workspaces/nuxt/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///workspaces/nuxt/node_modules/.pnpm/vue-bundle-renderer@2.1.1/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, joinRelativeURL } from 'file:///workspaces/nuxt/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
 import { renderToString } from 'file:///workspaces/nuxt/node_modules/.pnpm/vue@3.5.16_typescript@5.8.3/node_modules/vue/server-renderer/index.mjs';
 import destr, { destr as destr$1 } from 'file:///workspaces/nuxt/node_modules/.pnpm/destr@2.0.5/node_modules/destr/dist/index.mjs';
 import { createHooks } from 'file:///workspaces/nuxt/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
@@ -22,7 +23,6 @@ import { createStorage, prefixStorage } from 'file:///workspaces/nuxt/node_modul
 import unstorage_47drivers_47fs from 'file:///workspaces/nuxt/node_modules/.pnpm/unstorage@1.16.0_db0@0.3.2_ioredis@5.6.1/node_modules/unstorage/drivers/fs.mjs';
 import { digest } from 'file:///workspaces/nuxt/node_modules/.pnpm/ohash@2.0.11/node_modules/ohash/dist/index.mjs';
 import { klona } from 'file:///workspaces/nuxt/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file:///workspaces/nuxt/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
 import { snakeCase } from 'file:///workspaces/nuxt/node_modules/.pnpm/scule@1.3.0/node_modules/scule/dist/index.mjs';
 import { getContext } from 'file:///workspaces/nuxt/node_modules/.pnpm/unctx@2.4.1/node_modules/unctx/dist/index.mjs';
 import { toRouteMatcher, createRouter } from 'file:///workspaces/nuxt/node_modules/.pnpm/radix3@1.1.2/node_modules/radix3/dist/index.mjs';
@@ -652,7 +652,30 @@ const _inlineRuntimeConfig = {
   },
   "public": {
     "siteUrl": "http://localhost:3000",
-    "authUrl": "http://localhost:3000/api/auth"
+    "authUrl": "http://localhost:3000/api/auth",
+    "auth": {
+      "isEnabled": true,
+      "baseURL": "/api/auth",
+      "disableInternalRouting": false,
+      "disableServerSideAuth": false,
+      "originEnvKey": "AUTH_ORIGIN",
+      "sessionRefresh": {
+        "enablePeriodically": false,
+        "enableOnWindowFocus": true,
+        "handler": ""
+      },
+      "globalAppMiddleware": {
+        "isEnabled": false,
+        "allow404WithoutAuth": true,
+        "addDefaultCallbackUrl": true
+      },
+      "provider": {
+        "type": "authjs",
+        "trustHost": false,
+        "defaultProvider": "",
+        "addDefaultCallbackUrl": true
+      }
+    }
   },
   "zohoSmtpHost": "",
   "zohoSmtpPort": "",
@@ -1126,9 +1149,177 @@ function onConsoleLog(callback) {
   consola$1.wrapConsole();
 }
 
+const ERROR_MESSAGES = {
+  NO_SECRET: "AUTH_NO_SECRET: No `secret` - this is an error in production, see https://sidebase.io/nuxt-auth/resources/errors. You can ignore this during development",
+  NO_ORIGIN: "AUTH_NO_ORIGIN: No `origin` - this is an error in production, see https://sidebase.io/nuxt-auth/resources/errors. You can ignore this during development"
+};
+
+const isProduction = "development" === "production";
+function useTypedBackendConfig(runtimeConfig, type) {
+  const provider = runtimeConfig.public.auth.provider;
+  if (provider.type === type) {
+    return provider;
+  }
+  throw new Error("RuntimeError: Type must match at this point");
+}
+
+function resolveApiBaseURL(runtimeConfig, returnOnlyPathname) {
+  const authRuntimeConfig = runtimeConfig.public.auth;
+  if (returnOnlyPathname === void 0) {
+    returnOnlyPathname = !runtimeConfig.public.auth.disableInternalRouting;
+  }
+  let baseURL = authRuntimeConfig.baseURL;
+  if (authRuntimeConfig.originEnvKey) {
+    const envBaseURL = process.env[authRuntimeConfig.originEnvKey];
+    if (envBaseURL) {
+      baseURL = envBaseURL;
+    }
+  }
+  if (returnOnlyPathname) {
+    baseURL = withLeadingSlash(parseURL(baseURL).pathname);
+  }
+  return baseURL;
+}
+
+function getHostValueForAuthjs(event, runtimeConfig, trustHostUserPreference, isProduction) {
+  return getServerBaseUrl(runtimeConfig, true, trustHostUserPreference, isProduction, event);
+}
+function getServerBaseUrl(runtimeConfig, includePath, trustHostUserPreference, isProduction, event) {
+  const baseURL = resolveApiBaseURL(runtimeConfig, false);
+  const parsed = parseURL(baseURL);
+  if (parsed.protocol && parsed.host) {
+    const base = `${parsed.protocol}//${parsed.host}`;
+    return includePath ? `${base}${parsed.pathname}${parsed.search || ""}${parsed.hash || ""}` : base;
+  }
+  if (event && (true)) {
+    const requestUrl = getRequestURL(event, {
+      xForwardedHost: trustHostUserPreference,
+      xForwardedProto: trustHostUserPreference || void 0
+    });
+    if (!includePath) {
+      return requestUrl.origin;
+    }
+    const basePath = withLeadingSlash(parsed.pathname);
+    requestUrl.pathname = basePath;
+    return requestUrl.href;
+  }
+  throw new Error(ERROR_MESSAGES.NO_ORIGIN);
+}
+
+function defineRenderHandler(render) {
+  const runtimeConfig = useRuntimeConfig();
+  return eventHandler(async (event) => {
+    const nitroApp = useNitroApp();
+    const ctx = { event, render, response: void 0 };
+    await nitroApp.hooks.callHook("render:before", ctx);
+    if (!ctx.response) {
+      if (event.path === `${runtimeConfig.app.baseURL}favicon.ico`) {
+        setResponseHeader(event, "Content-Type", "image/x-icon");
+        return send(
+          event,
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        );
+      }
+      ctx.response = await ctx.render(event);
+      if (!ctx.response) {
+        const _currentStatus = getResponseStatus(event);
+        setResponseStatus(event, _currentStatus === 200 ? 500 : _currentStatus);
+        return send(
+          event,
+          "No response returned from render handler: " + event.path
+        );
+      }
+    }
+    await nitroApp.hooks.callHook("render:response", ctx.response, ctx);
+    if (ctx.response.headers) {
+      setResponseHeaders(event, ctx.response.headers);
+    }
+    if (ctx.response.statusCode || ctx.response.statusMessage) {
+      setResponseStatus(
+        event,
+        ctx.response.statusCode,
+        ctx.response.statusMessage
+      );
+    }
+    return ctx.response.body;
+  });
+}
+
+const scheduledTasks = false;
+
+const tasks = {
+  
+};
+
+const __runningTasks__ = {};
+async function runTask(name, {
+  payload = {},
+  context = {}
+} = {}) {
+  if (__runningTasks__[name]) {
+    return __runningTasks__[name];
+  }
+  if (!(name in tasks)) {
+    throw createError({
+      message: `Task \`${name}\` is not available!`,
+      statusCode: 404
+    });
+  }
+  if (!tasks[name].resolve) {
+    throw createError({
+      message: `Task \`${name}\` is not implemented!`,
+      statusCode: 501
+    });
+  }
+  const handler = await tasks[name].resolve();
+  const taskEvent = { name, payload, context };
+  __runningTasks__[name] = handler.run(taskEvent);
+  try {
+    const res = await __runningTasks__[name];
+    return res;
+  } finally {
+    delete __runningTasks__[name];
+  }
+}
+
+function buildAssetsDir() {
+  return useRuntimeConfig().app.buildAssetsDir;
+}
+function buildAssetsURL(...path) {
+  return joinRelativeURL(publicAssetsURL(), buildAssetsDir(), ...path);
+}
+function publicAssetsURL(...path) {
+  const app = useRuntimeConfig().app;
+  const publicBase = app.cdnURL || app.baseURL;
+  return path.length ? joinRelativeURL(publicBase, ...path) : publicBase;
+}
+
+const pool = new Pool({
+  connectionString: useRuntimeConfig().databaseUrl,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+function defineNitroPlugin(def) {
+  return def;
+}
+const _5zbrMIwVN9z3LVWqKRIN8AOwD0ijm8tWpD_oAsvy8 = defineNitroPlugin(() => {
+  try {
+    const runtimeConfig = useRuntimeConfig();
+    const trustHostUserPreference = useTypedBackendConfig(runtimeConfig, "authjs").trustHost;
+    getServerBaseUrl(runtimeConfig, false, trustHostUserPreference, isProduction);
+  } catch (error) {
+    {
+      console.info(ERROR_MESSAGES.NO_ORIGIN);
+    }
+  }
+});
+
 const plugins = [
   _UBph_D2ZE3XP7oXNjszMsmX5Po5OKfB_wqk8CElMDxg,
-_UuK4CAKe9c9Zn15V7U9HvTVLTnhpspJGOvVAz6I42o
+_UuK4CAKe9c9Zn15V7U9HvTVLTnhpspJGOvVAz6I42o,
+_5zbrMIwVN9z3LVWqKRIN8AOwD0ijm8tWpD_oAsvy8
 ];
 
 const VueResolver = (_, value) => {
@@ -1186,18 +1377,6 @@ function setSSRError(ssrContext, error) {
   ssrContext.error = true;
   ssrContext.payload = { error };
   ssrContext.url = error.url;
-}
-
-function buildAssetsDir() {
-  return useRuntimeConfig().app.buildAssetsDir;
-}
-function buildAssetsURL(...path) {
-  return joinRelativeURL(publicAssetsURL(), buildAssetsDir(), ...path);
-}
-function publicAssetsURL(...path) {
-  const app = useRuntimeConfig().app;
-  const publicBase = app.cdnURL || app.baseURL;
-  return path.length ? joinRelativeURL(publicBase, ...path) : publicBase;
 }
 
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
@@ -1603,82 +1782,6 @@ function useNitroApp() {
 }
 runNitroPlugins(nitroApp$1);
 
-function defineRenderHandler(render) {
-  const runtimeConfig = useRuntimeConfig();
-  return eventHandler(async (event) => {
-    const nitroApp = useNitroApp();
-    const ctx = { event, render, response: void 0 };
-    await nitroApp.hooks.callHook("render:before", ctx);
-    if (!ctx.response) {
-      if (event.path === `${runtimeConfig.app.baseURL}favicon.ico`) {
-        setResponseHeader(event, "Content-Type", "image/x-icon");
-        return send(
-          event,
-          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        );
-      }
-      ctx.response = await ctx.render(event);
-      if (!ctx.response) {
-        const _currentStatus = getResponseStatus(event);
-        setResponseStatus(event, _currentStatus === 200 ? 500 : _currentStatus);
-        return send(
-          event,
-          "No response returned from render handler: " + event.path
-        );
-      }
-    }
-    await nitroApp.hooks.callHook("render:response", ctx.response, ctx);
-    if (ctx.response.headers) {
-      setResponseHeaders(event, ctx.response.headers);
-    }
-    if (ctx.response.statusCode || ctx.response.statusMessage) {
-      setResponseStatus(
-        event,
-        ctx.response.statusCode,
-        ctx.response.statusMessage
-      );
-    }
-    return ctx.response.body;
-  });
-}
-
-const scheduledTasks = false;
-
-const tasks = {
-  
-};
-
-const __runningTasks__ = {};
-async function runTask(name, {
-  payload = {},
-  context = {}
-} = {}) {
-  if (__runningTasks__[name]) {
-    return __runningTasks__[name];
-  }
-  if (!(name in tasks)) {
-    throw createError({
-      message: `Task \`${name}\` is not available!`,
-      statusCode: 404
-    });
-  }
-  if (!tasks[name].resolve) {
-    throw createError({
-      message: `Task \`${name}\` is not implemented!`,
-      statusCode: 501
-    });
-  }
-  const handler = await tasks[name].resolve();
-  const taskEvent = { name, payload, context };
-  __runningTasks__[name] = handler.run(taskEvent);
-  try {
-    const res = await __runningTasks__[name];
-    return res;
-  } finally {
-    delete __runningTasks__[name];
-  }
-}
-
 if (!globalThis.crypto) {
   globalThis.crypto = nodeCrypto;
 }
@@ -1790,12 +1893,154 @@ const styles$1 = /*#__PURE__*/Object.freeze({
   default: styles
 });
 
-const pool = new Pool({
-  connectionString: useRuntimeConfig().databaseUrl,
-  ssl: {
-    rejectUnauthorized: false
+const isNonEmptyObject = (obj) => typeof obj === "object" && obj !== null && Object.keys(obj).length > 0;
+
+let preparedAuthjsHandler;
+let usedSecret;
+function NuxtAuthHandler(nuxtAuthOptions) {
+  const runtimeConfig = useRuntimeConfig();
+  const trustHostUserPreference = useTypedBackendConfig(runtimeConfig, "authjs").trustHost;
+  usedSecret = nuxtAuthOptions?.secret;
+  if (!usedSecret) {
+    {
+      console.info(ERROR_MESSAGES.NO_SECRET);
+      usedSecret = "secret";
+    }
   }
-});
+  const options = defu$1(nuxtAuthOptions, {
+    secret: usedSecret,
+    logger: void 0,
+    providers: [],
+    // SAFETY: We trust host here because `getHostValueForAuthjs` is responsible for producing a trusted URL
+    trustHost: true,
+    // AuthJS uses `/auth` as default, but we rely on `/api/auth` (same as in previous `next-auth`)
+    basePath: runtimeConfig.public.auth.baseURL
+    // Uncomment to enable framework-author specific functionality
+    // raw: raw as typeof raw
+  });
+  if (preparedAuthjsHandler) {
+    console.error("You setup the auth handler for a second time - this is likely undesired. Make sure that you only call `NuxtAuthHandler( ... )` once");
+  }
+  preparedAuthjsHandler = (req) => AuthHandler({ req, options });
+  return eventHandler(async (event) => {
+    const { res } = event.node;
+    const nextRequest = await createRequestForAuthjs(event, runtimeConfig, trustHostUserPreference);
+    const nextResult = await preparedAuthjsHandler(nextRequest);
+    if (nextResult.status) {
+      res.statusCode = nextResult.status;
+    }
+    nextResult.cookies?.forEach((cookie) => setCookieDeduped(event, cookie.name, cookie.value, cookie.options));
+    nextResult.headers?.forEach((header) => appendHeaderDeduped(event, header.key, header.value));
+    if (!nextResult.redirect) {
+      return nextResult.body;
+    }
+    if (nextRequest.body?.json) {
+      return { url: nextResult.redirect };
+    }
+    return await sendRedirect(event, nextResult.redirect);
+  });
+}
+async function getServerSession(event) {
+  const runtimeConfig = useRuntimeConfig();
+  const authBasePathname = resolveApiBaseURL(runtimeConfig, true);
+  const trustHostUserPreference = useTypedBackendConfig(runtimeConfig, "authjs").trustHost;
+  if (event.path && event.path.startsWith(authBasePathname)) {
+    return null;
+  }
+  const sessionUrlPath = joinURL(authBasePathname, "/session");
+  const headers = getHeaders(event);
+  if (!preparedAuthjsHandler) {
+    await $fetch(sessionUrlPath, { headers }).catch((error) => error.data);
+    if (!preparedAuthjsHandler) {
+      throw createError({ statusCode: 500, statusMessage: "Tried to get server session without setting up an endpoint to handle authentication (see https://github.com/sidebase/nuxt-auth#quick-start)" });
+    }
+  }
+  const authjsRequest = {
+    action: "session",
+    method: "GET",
+    headers,
+    body: void 0,
+    cookies: parseCookies(event),
+    providerId: void 0,
+    error: void 0,
+    host: getHostValueForAuthjs(event, runtimeConfig, trustHostUserPreference, isProduction),
+    query: {}
+  };
+  const authjsResponse = await preparedAuthjsHandler(authjsRequest);
+  const session = authjsResponse.body;
+  if (isNonEmptyObject(session)) {
+    return session;
+  }
+  return null;
+}
+async function createRequestForAuthjs(event, runtimeConfig, trustHostUserPreference) {
+  const nextRequest = {
+    // `authjs` expects the baseURL here despite the param name
+    host: getHostValueForAuthjs(event, runtimeConfig, trustHostUserPreference, isProduction),
+    body: void 0,
+    cookies: parseCookies(event),
+    query: void 0,
+    headers: getHeaders(event),
+    method: event.method,
+    providerId: void 0,
+    error: void 0
+  };
+  const query = getQuery$1(event);
+  const { action, providerId } = parseActionAndProvider(event);
+  const error = query.error;
+  if (Array.isArray(error)) {
+    throw createError({ statusCode: 400, statusMessage: "Error query parameter can only appear once" });
+  }
+  const body = isMethod(event, ["PATCH", "POST", "PUT", "DELETE"]) ? await readBody(event) : void 0;
+  return {
+    ...nextRequest,
+    body,
+    query,
+    action,
+    providerId,
+    error: error ? String(error) : void 0
+  };
+}
+const SUPPORTED_ACTIONS = ["providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error", "_log"];
+function parseActionAndProvider({ context }) {
+  const params = context.params?._?.split("/");
+  if (!params || ![1, 2].includes(params.length)) {
+    throw createError({ statusCode: 400, statusMessage: `Invalid path used for auth-endpoint. Supply either one path parameter (e.g., \`/api/auth/session\`) or two (e.g., \`/api/auth/signin/github\` after the base path (in previous examples base path was: \`/api/auth/\`. Received \`${params}\`` });
+  }
+  const [unvalidatedAction, providerId] = params;
+  const action = SUPPORTED_ACTIONS.find((action2) => action2 === unvalidatedAction);
+  if (!action) {
+    throw createError({ statusCode: 400, statusMessage: `Called endpoint with unsupported action ${unvalidatedAction}. Only the following actions are supported: ${SUPPORTED_ACTIONS.join(", ")}` });
+  }
+  return { action, providerId };
+}
+function appendHeaderDeduped(event, name, value) {
+  let current = getResponseHeader(event, name);
+  if (!current) {
+    setResponseHeader(event, name, value);
+    return;
+  }
+  if (!Array.isArray(current)) {
+    current = [current.toString()];
+  }
+  if (current.includes(value)) {
+    return;
+  }
+  current.push(value);
+  setResponseHeader(event, name, current);
+}
+function setCookieDeduped(event, name, value, serializeOptions) {
+  let setCookiesHeader = getResponseHeader(event, "set-cookie");
+  if (setCookiesHeader) {
+    if (!Array.isArray(setCookiesHeader)) {
+      setCookiesHeader = [setCookiesHeader.toString()];
+    }
+    const filterBy = `${name}=`;
+    setCookiesHeader = setCookiesHeader.filter((cookie) => !cookie.startsWith(filterBy));
+    setResponseHeader(event, "set-cookie", setCookiesHeader);
+  }
+  setCookie(event, name, value, serializeOptions);
+}
 
 class UserService {
   static async findUserByEmail(email) {
@@ -1907,45 +2152,54 @@ const _____ = NuxtAuthHandler({
       if (!account || !profile || !user.email) return false;
       const provider = account.provider;
       const providerId = account.providerAccountId;
-      const emailCheck = await UserService.validateEmailAvailability(user.email, provider);
-      if (!emailCheck.available) {
-        throw new Error(`Email sudah terdaftar dengan provider ${emailCheck.conflictProvider}`);
+      try {
+        const emailCheck = await UserService.validateEmailAvailability(user.email, provider);
+        if (!emailCheck.available) {
+          throw new Error(`Email sudah terdaftar dengan provider ${emailCheck.conflictProvider}`);
+        }
+        let username = user.name || user.email.split("@")[0];
+        let avatarUrl = user.image || null;
+        if (provider === "discord") {
+          username = profile.username || username;
+          avatarUrl = profile.avatar ? `https://cdn.discordapp.com/avatars/${providerId}/${profile.avatar}.png` : avatarUrl;
+        } else if (provider === "github") {
+          username = profile.login || username;
+          avatarUrl = profile.avatar_url || avatarUrl;
+        }
+        const oauthProfile = {
+          email: user.email,
+          username,
+          avatar_url: avatarUrl,
+          provider,
+          provider_id: providerId
+        };
+        const existingUser = await UserService.findUserByProvider(provider, providerId);
+        if (existingUser) {
+          await UserService.updateUser(user.email, {
+            username: oauthProfile.username,
+            avatar_url: oauthProfile.avatar_url
+          });
+        } else {
+          await UserService.createUser(oauthProfile);
+        }
+        return true;
+      } catch (error) {
+        console.error("SignIn error:", error);
+        return false;
       }
-      let username = user.name || user.email.split("@")[0];
-      let avatarUrl = user.image || null;
-      if (provider === "discord") {
-        username = profile.username || username;
-        avatarUrl = profile.avatar ? `https://cdn.discordapp.com/avatars/${providerId}/${profile.avatar}.png` : avatarUrl;
-      } else if (provider === "github") {
-        username = profile.login || username;
-        avatarUrl = profile.avatar_url || avatarUrl;
-      }
-      const oauthProfile = {
-        email: user.email,
-        username,
-        avatar_url: avatarUrl,
-        provider,
-        provider_id: providerId
-      };
-      const existingUser = await UserService.findUserByProvider(provider, providerId);
-      if (existingUser) {
-        await UserService.updateUser(user.email, {
-          username: oauthProfile.username,
-          avatar_url: oauthProfile.avatar_url
-        });
-      } else {
-        await UserService.createUser(oauthProfile);
-      }
-      return true;
     },
     async session({ session, token }) {
       var _a;
       if ((_a = session.user) == null ? void 0 : _a.email) {
-        const user = await UserService.findUserByEmail(session.user.email);
-        if (user) {
-          session.user.username = user.username;
-          session.user.image = user.avatar_url;
-          session.user.provider = user.provider;
+        try {
+          const user = await UserService.findUserByEmail(session.user.email);
+          if (user) {
+            session.user.username = user.username;
+            session.user.image = user.avatar_url;
+            session.user.provider = user.provider;
+          }
+        } catch (error) {
+          console.error("Session callback error:", error);
         }
       }
       return session;
@@ -1955,7 +2209,7 @@ const _____ = NuxtAuthHandler({
     signIn: "/auth/signin",
     error: "/auth/error"
   }
-});
+}, useRuntimeConfig());
 
 const _____$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,

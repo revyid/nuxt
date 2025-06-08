@@ -29,5 +29,8 @@ export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId
 export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callback';
 export { setInterval } from '#app/compat/interval';
 export { useContactForm } from '../composables/useContactForm';
+export { useAuth } from '../node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.21.1_next@15.3.3_@babel+core@7.27_b5bde235cc0ee66429811ba436c3ef77/node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuth';
+export { useAuthState } from '../node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.21.1_next@15.3.3_@babel+core@7.27_b5bde235cc0ee66429811ba436c3ef77/node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuthState';
+export { _refreshHandler } from './refreshHandler';
 export { useNuxtDevTools } from '../node_modules/.pnpm/@nuxt+devtools@2.4.1_vite@6.3.5_@types+node@22.15.29_jiti@2.4.2_lightningcss@1.30.1_ter_4e61256f8ebebad5cf76052dbb58c995/node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';
 export { definePageMeta } from '../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/pages/runtime/composables';

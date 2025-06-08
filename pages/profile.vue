@@ -8,28 +8,33 @@
           Loading...
         </div>
         
-        <div v-else-if="user" class="space-y-4">
+        <div v-else-if="data?.user" class="space-y-4">
           <div class="flex justify-center">
             <img
-              :src="user.avatar_url || '/default-avatar.png'"
-              :alt="user.username"
+              :src="data.user.image || '/default-avatar.png'"
+              :alt="data.user.name || 'User'"
               class="w-20 h-20 rounded-full"
             >
           </div>
           
           <div>
-            <p class="text-sm text-gray-500">Username</p>
-            <p class="font-medium">{{ user.username }}</p>
+            <p class="text-sm text-gray-500">Name</p>
+            <p class="font-medium">{{ data.user.name }}</p>
           </div>
           
           <div>
             <p class="text-sm text-gray-500">Email</p>
-            <p class="font-medium">{{ user.email }}</p>
+            <p class="font-medium">{{ data.user.email }}</p>
           </div>
           
-          <div>
+          <div v-if="userProfile">
+            <p class="text-sm text-gray-500">Username</p>
+            <p class="font-medium">{{ userProfile.username }}</p>
+          </div>
+          
+          <div v-if="userProfile">
             <p class="text-sm text-gray-500">Provider</p>
-            <p class="font-medium capitalize">{{ user.provider }}</p>
+            <p class="font-medium capitalize">{{ userProfile.provider }}</p>
           </div>
           
           <div class="flex space-x-4">
@@ -49,6 +54,10 @@
             </button>
           </div>
         </div>
+        
+        <div v-else class="text-red-500">
+          No user data available
+        </div>
       </div>
     </div>
   </div>
@@ -59,16 +68,19 @@ definePageMeta({
   auth: true
 })
 
-const { data: session, signOut } = useAuth()
+const { data, status, signOut } = useAuth()
 const refreshing = ref(false)
 
-const { data: user, pending, refresh } = await $fetch('/api/user/profile')
+// Fetch additional user profile data
+const { data: userProfile, pending, refresh: refreshUserProfile } = await useFetch('/api/user/profile', {
+  server: false
+})
 
 const refreshProfile = async () => {
   refreshing.value = true
   try {
     await $fetch('/api/user/refresh', { method: 'POST' })
-    await refresh()
+    await refreshUserProfile()
   } catch (error) {
     console.error('Error refreshing profile:', error)
   } finally {

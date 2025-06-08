@@ -94,11 +94,14 @@
       "#internal/nuxt/paths": [
         "../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/core/runtime/nitro/utils/paths"
       ],
-      "#auth": [
-        "./@sidebase/nuxt-auth"
-      ],
       "#unhead/composables": [
         "../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/head/runtime/composables/v3"
+      ],
+      "#auth": [
+        "../node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.21.1_next@15.3.3_@babel+core@7.27_b5bde235cc0ee66429811ba436c3ef77/node_modules/@sidebase/nuxt-auth/dist/runtime/server/services"
+      ],
+      "#auth/*": [
+        "../node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.21.1_next@15.3.3_@babel+core@7.27_b5bde235cc0ee66429811ba436c3ef77/node_modules/@sidebase/nuxt-auth/dist/runtime/server/services/*"
       ]
     },
     "lib": [
@@ -109,6 +112,7 @@
   },
   "include": [
     "./types/nitro-nuxt.d.ts",
+    "../node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.21.1_next@15.3.3_@babel+core@7.27_b5bde235cc0ee66429811ba436c3ef77/node_modules/@sidebase/nuxt-auth/runtime/server",
     "../node_modules/.pnpm/@nuxt+devtools@2.4.1_vite@6.3.5_@types+node@22.15.29_jiti@2.4.2_lightningcss@1.30.1_ter_4e61256f8ebebad5cf76052dbb58c995/node_modules/@nuxt/devtools/runtime/server",
     "../node_modules/.pnpm/@nuxt+telemetry@2.6.6_magicast@0.3.5/node_modules/@nuxt/telemetry/runtime/server",
     "./types/nitro.d.ts",
@@ -118,6 +122,7 @@
   "exclude": [
     "../node_modules",
     "../node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/node_modules",
+    "../node_modules/.pnpm/@sidebase+nuxt-auth@0.10.1_magicast@0.3.5_next-auth@4.21.1_next@15.3.3_@babel+core@7.27_b5bde235cc0ee66429811ba436c3ef77/node_modules/@sidebase/nuxt-auth/node_modules",
     "../node_modules/.pnpm/@nuxt+devtools@2.4.1_vite@6.3.5_@types+node@22.15.29_jiti@2.4.2_lightningcss@1.30.1_ter_4e61256f8ebebad5cf76052dbb58c995/node_modules/@nuxt/devtools/node_modules",
     "../node_modules/.pnpm/@nuxt+telemetry@2.6.6_magicast@0.3.5/node_modules/@nuxt/telemetry/node_modules",
     "../dist"

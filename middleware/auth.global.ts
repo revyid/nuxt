@@ -1,3 +1,4 @@
+// middleware/auth.global.ts
 export default defineNuxtRouteMiddleware((to) => {
   const { status } = useAuth()
   
