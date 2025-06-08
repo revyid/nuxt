@@ -1,17 +1,33 @@
 import { Pool } from 'pg'
 
-const pool = new Pool({
-  connectionString: useRuntimeConfig().databaseUrl,
-  ssl: {
-    rejectUnauthorized: false
-  }
-})
+// Create pool instance without immediate configuration
+let pool: Pool | null = null
 
-export { pool }
+// Initialize pool with runtime config
+export function createPool(databaseUrl: string) {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: databaseUrl,
+      ssl: {
+        rejectUnauthorized: false
+      }
+    })
+  }
+  return pool
+}
+
+// Get existing pool (must be initialized first)
+export function getPool() {
+  if (!pool) {
+    throw new Error('Database pool not initialized. Call createPool() first.')
+  }
+  return pool
+}
 
 // Database initialization
-export async function initDatabase() {
-  const client = await pool.connect()
+export async function initDatabase(databaseUrl: string) {
+  const dbPool = createPool(databaseUrl)
+  const client = await dbPool.connect()
   
   try {
     // Create users table
@@ -36,7 +52,11 @@ export async function initDatabase() {
     console.log('Database initialized successfully')
   } catch (error) {
     console.error('Database initialization error:', error)
+    throw error
   } finally {
     client.release()
   }
 }
+
+// Export pool for backward compatibility (will be null initially)
+export { pool }

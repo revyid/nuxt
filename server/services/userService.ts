@@ -1,4 +1,4 @@
-import { pool } from '~/server/utils/db'
+import { getPool } from '~/server/utils/db'
 
 export interface User {
   email: string
@@ -20,6 +20,7 @@ export interface OAuthProfile {
 
 export class UserService {
   static async findUserByEmail(email: string): Promise<User | null> {
+    const pool = getPool()
     const client = await pool.connect()
     
     try {
@@ -35,6 +36,7 @@ export class UserService {
   }
 
   static async findUserByProvider(provider: string, providerId: string): Promise<User | null> {
+    const pool = getPool()
     const client = await pool.connect()
     
     try {
@@ -50,6 +52,7 @@ export class UserService {
   }
 
   static async createUser(profile: OAuthProfile): Promise<User> {
+    const pool = getPool()
     const client = await pool.connect()
     
     try {
@@ -72,6 +75,7 @@ export class UserService {
   }
 
   static async updateUser(email: string, updates: Partial<OAuthProfile>): Promise<User> {
+    const pool = getPool()
     const client = await pool.connect()
     
     try {

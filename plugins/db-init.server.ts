@@ -1,5 +1,6 @@
-import { initDatabase } from '~/server/utils/db'
+kimport { initDatabase } from '~/server/utils/db'
 
 export default defineNuxtPlugin(async () => {
-  await initDatabase()
+  const config = useRuntimeConfig()
+  await initDatabase(config.databaseUrl)
 })

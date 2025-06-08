@@ -9,7 +9,6 @@ import Google from 'file:///workspaces/nuxt/node_modules/.pnpm/@auth+core@0.37.2
 import GitHub from 'file:///workspaces/nuxt/node_modules/.pnpm/@auth+core@0.37.2_nodemailer@7.0.3/node_modules/@auth/core/providers/github.js';
 import Discord from 'file:///workspaces/nuxt/node_modules/.pnpm/@auth+core@0.37.2_nodemailer@7.0.3/node_modules/@auth/core/providers/discord.js';
 import nodemailer from 'file:///workspaces/nuxt/node_modules/.pnpm/nodemailer@7.0.3/node_modules/nodemailer/lib/nodemailer.js';
-import { Pool } from 'file:///workspaces/nuxt/node_modules/.pnpm/pg@8.16.0/node_modules/pg/esm/index.mjs';
 import { AuthHandler } from 'file:///workspaces/nuxt/node_modules/.pnpm/next-auth@4.21.1_next@15.3.3_@babel+core@7.27.4_react-dom@19.1.0_react@19.1.0__react@19_f0bdd1178131c270726f266f21a0a903/node_modules/next-auth/core/index.js';
 import defu, { defuFn, defu as defu$1 } from 'file:///workspaces/nuxt/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, withLeadingSlash, joinRelativeURL } from 'file:///workspaces/nuxt/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
@@ -1294,12 +1293,11 @@ function publicAssetsURL(...path) {
   return path.length ? joinRelativeURL(publicBase, ...path) : publicBase;
 }
 
-const pool = new Pool({
-  connectionString: useRuntimeConfig().databaseUrl,
-  ssl: {
-    rejectUnauthorized: false
+function getPool() {
+  {
+    throw new Error("Database pool not initialized. Call createPool() first.");
   }
-});
+}
 
 function defineNitroPlugin(def) {
   return def;
@@ -2044,6 +2042,7 @@ function setCookieDeduped(event, name, value, serializeOptions) {
 
 class UserService {
   static async findUserByEmail(email) {
+    const pool = getPool();
     const client = await pool.connect();
     try {
       const result = await client.query(
@@ -2056,6 +2055,7 @@ class UserService {
     }
   }
   static async findUserByProvider(provider, providerId) {
+    const pool = getPool();
     const client = await pool.connect();
     try {
       const result = await client.query(
@@ -2068,6 +2068,7 @@ class UserService {
     }
   }
   static async createUser(profile) {
+    const pool = getPool();
     const client = await pool.connect();
     try {
       const result = await client.query(`
@@ -2087,6 +2088,7 @@ class UserService {
     }
   }
   static async updateUser(email, updates) {
+    const pool = getPool();
     const client = await pool.connect();
     try {
       const setClause = [];
