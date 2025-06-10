@@ -1,9 +1,9 @@
 {
-  "_hash": "uqtyJ6M1nNyiLHyT3tdCiJGrk-goeBF8QMKHfoe0qEY",
+  "_hash": "vm_lvNAO7l6E19-yBjtLDJMPsynrwEYY-QImvSZ55i4",
   "project": {
     "rootDir": "/workspaces/nuxt"
   },
   "versions": {
-    "nuxt": "3.17.4"
+    "nuxt": "3.17.5"
   }
 }

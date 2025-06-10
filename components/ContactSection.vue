@@ -36,8 +36,12 @@
 
           <!-- Contact Methods -->
           <div class="space-y-6">
-            <div class="contact-item" v-for="(item, index) in contactMethods" :key="index" 
-                 :style="{ animationDelay: `${index * 0.2}s` }">
+            <div 
+              v-for="(item, index) in contactMethods" 
+              :key="index"
+              class="contact-item" 
+              :style="{ animationDelay: `${index * 0.2}s` }"
+            >
               <div class="contact-icon-wrapper">
                 <div class="contact-icon">
                   <component :is="item.icon" class="w-6 h-6 text-[#42b883]" />
@@ -126,7 +130,7 @@
               <div class="button-content">
                 <span v-if="!isSubmitting" class="button-text">
                   <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                   </svg>
                   Send Message
@@ -176,7 +180,19 @@
 </template>
 
 <script setup lang="ts">
-import type { ContactFormData, ContactMethod } from '~/types/contact'
+// Types
+interface ContactFormData {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
+interface ContactMethod {
+  title: string
+  value: string
+  icon: string
+}
 
 // Contact methods data
 const contactMethods: ContactMethod[] = [
@@ -205,35 +221,77 @@ const form = reactive<ContactFormData>({
   message: '',
 })
 
-// Use composable for form handling
-const {
-  isSubmitting,
-  showSuccess,
-  showError,
-  errorMessage,
-  submitForm,
-  validateForm
-} = useContactForm()
-
 // Component state
 const focusedField = ref<string>('')
+const isSubmitting = ref<boolean>(false)
+const showSuccess = ref<boolean>(false)
+const showError = ref<boolean>(false)
+const errorMessage = ref<string>('')
 
-// Form validation with real-time feedback
+// Form validation
+const validateForm = (formData: ContactFormData): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  
+  return !!(
+    formData.name?.trim() &&
+    formData.email?.trim() &&
+    emailRegex.test(formData.email) &&
+    formData.subject?.trim() &&
+    formData.message?.trim()
+  )
+}
+
 const isFormValid = computed(() => validateForm(form))
+
+// Form submission simulation
+const submitForm = async (formData: ContactFormData): Promise<boolean> => {
+  try {
+    isSubmitting.value = true
+    showError.value = false
+    showSuccess.value = false
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    // Simulate random success/failure for demo
+    const success = Math.random() > 0.2 // 80% success rate
+    
+    if (success) {
+      showSuccess.value = true
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        showSuccess.value = false
+      }, 5000)
+      return true
+    } else {
+      throw new Error('Network error occurred. Please try again.')
+    }
+  } catch (error) {
+    showError.value = true
+    errorMessage.value = error instanceof Error ? error.message : 'An unexpected error occurred'
+    // Auto-hide error message after 5 seconds
+    setTimeout(() => {
+      showError.value = false
+    }, 5000)
+    return false
+  } finally {
+    isSubmitting.value = false
+  }
+}
 
 // Handle form submission
 const handleSubmit = async () => {
   if (!isFormValid.value) {
     // Show validation errors
-    if (!form.name.trim()) focusedField.value = 'name'
-    else if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) focusedField.value = 'email'
-    else if (!form.subject.trim()) focusedField.value = 'subject'
-    else if (!form.message.trim()) focusedField.value = 'message'
+    if (!form.name?.trim()) focusedField.value = 'name'
+    else if (!form.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) focusedField.value = 'email'
+    else if (!form.subject?.trim()) focusedField.value = 'subject'
+    else if (!form.message?.trim()) focusedField.value = 'message'
     return
   }
 
   const success = await submitForm({ ...form })
-  
+
   if (success) {
     // Reset form on success
     Object.keys(form).forEach((key) => {
@@ -243,11 +301,11 @@ const handleSubmit = async () => {
   }
 }
 
-// Icon components (you can replace with your preferred icon library)
+// Icon components
 const IconMail = {
   template: `
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
     </svg>
   `
@@ -256,7 +314,7 @@ const IconMail = {
 const IconMapPin = {
   template: `
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
     </svg>
@@ -266,7 +324,7 @@ const IconMapPin = {
 const IconClock = {
   template: `
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
     </svg>
   `
@@ -310,7 +368,7 @@ const IconClock = {
 .grid-pattern {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(66, 184, 131, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(66, 184, 131, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -396,7 +454,6 @@ const IconClock = {
 .contact-item {
   display: flex;
   align-items: center;
-  space-x: 1rem;
   padding: 15px;
   border-radius: 12px;
   transition: all 0.3s ease;
@@ -683,20 +740,20 @@ const IconClock = {
 /* Responsive Design */
 @media (max-width: 768px) {
   .floating-orb { display: none; }
-  
+
   .contact-info-card, .contact-form-card {
     padding: 20px;
   }
-  
+
   .contact-item {
     padding: 12px;
   }
-  
+
   .custom-input {
     padding: 14px;
     font-size: 16px; /* Prevent zoom on iOS */
   }
-  
+
   .submit-button {
     padding: 14px 24px;
   }

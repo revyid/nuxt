@@ -7,12 +7,12 @@
     "module": true,
     "resourceType": "script"
   },
-  "/workspaces/nuxt/node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/entry.js": {
+  "/workspaces/nuxt/node_modules/.pnpm/nuxt@3.17.5_@parcel+watcher@2.5.1_@types+node@22.15.30_db0@0.3.2_ioredis@5.6.1_lightnin_d4670fbd712862b5c14f9c80e05b48f4/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "/workspaces/nuxt/node_modules/.pnpm/nuxt@3.17.4_@parcel+watcher@2.5.1_@types+node@22.15.29_db0@0.3.2_ioredis@5.6.1_lightnin_ad3efa013d1f13e06ffaa568dfd1c543/node_modules/nuxt/dist/app/entry.js"
+    "file": "/workspaces/nuxt/node_modules/.pnpm/nuxt@3.17.5_@parcel+watcher@2.5.1_@types+node@22.15.30_db0@0.3.2_ioredis@5.6.1_lightnin_d4670fbd712862b5c14f9c80e05b48f4/node_modules/nuxt/dist/app/entry.js"
   }
 }
