@@ -1,13 +1,6 @@
 <template>
   <div>
-    <NuxtPage />
+    <NuxtRouteAnnouncer />
+    <NuxtWelcome />
   </div>
 </template>
-
-<script setup lang="ts">
-const authStore = useAuthStore()
-
-onMounted(() => {
-  authStore.initAuth()
-})
-</script>

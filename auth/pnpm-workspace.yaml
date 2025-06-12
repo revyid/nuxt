@@ -2,6 +2,9 @@ onlyBuiltDependencies:
   - '@firebase/util'
   - '@parcel/watcher'
   - '@tailwindcss/oxide'
+  - better-sqlite3
   - esbuild
   - protobufjs
+  - sharp
   - unrs-resolver
+  - vue-demi
