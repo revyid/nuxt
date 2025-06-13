@@ -33,7 +33,7 @@
 	>
 	  <Icon 
 	    v-if="!isMusicPlayerOpen" 
-	    name="mdi:music" 
+	    name="mdi:spotify" 
 	    class="w-6 h-6 md:w-7 md:h-7 text-white transition-transform duration-300 group-hover:scale-110"
 	  />
 	  <Icon 

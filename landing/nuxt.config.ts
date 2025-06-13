@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   css: ['/main.css'],
 
   modules: [
+    '@nuxt/icon'
   ],
 
   vite: {

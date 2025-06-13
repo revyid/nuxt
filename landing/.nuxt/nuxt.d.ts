@@ -1,3 +1,4 @@
+/// <reference types="@nuxt/icon" />
 /// <reference types="@nuxt/devtools" />
 /// <reference types="@nuxt/telemetry" />
 /// <reference path="types/builder-env.d.ts" />

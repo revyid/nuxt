@@ -6,6 +6,9 @@ declare module "nitropack/types" {
     '/__nuxt_error': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/.pnpm/nuxt@3.17.5_@parcel+watcher@2.5.1_@types+node@22.15.30_db0@0.3.2_ioredis@5.6.1_lightnin_d4670fbd712862b5c14f9c80e05b48f4/node_modules/nuxt/dist/core/runtime/nitro/handlers/renderer').default>>>>
     }
+    '/api/_nuxt_icon/:collection': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/.pnpm/@nuxt+icon@1.13.0_magicast@0.3.5_vite@6.3.5_@types+node@22.15.30_jiti@2.4.2_lightningcs_ca96e8db0924be8090a6c3aa30504b0d/node_modules/@nuxt/icon/dist/runtime/server/api').default>>>>
+    }
     '/__nuxt_island/**': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/#internal/nuxt/island-renderer').default>>>>
     }
