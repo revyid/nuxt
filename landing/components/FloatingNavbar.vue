@@ -9,21 +9,6 @@
   >
     <div class="flex items-center space-x-4">
       <!-- Main Navigation -->
-      <div class="glass-enhanced rounded-full px-6 md:px-8 py-3 md:py-4 shadow-2xl backdrop-blur-xl border border-white/20">
-        <ul class="flex items-center space-x-4 md:space-x-8 text-xs md:text-sm font-semibold">
-          <li v-for="item in navItems" :key="item.id">
-            <a 
-              :href="`#${item.id}`" 
-              @click="scrollTo(item.id)"
-              class="relative text-white/80 hover:text-[#42b883] transition-all duration-300 hover:scale-110 transform group whitespace-nowrap"
-            >
-              {{ item.label }}
-              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#42b883] to-[#35495e] transition-all duration-300 group-hover:w-full"></span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
 	<!-- Spotify Music Player Button -->
 	<button
 	  @click="toggleMusicPlayer"
@@ -42,6 +27,21 @@
 	    class="w-6 h-6 md:w-7 md:h-7 text-white transition-transform duration-300"
 	  />
 	</button>
+
+       <div class="glass-enhanced rounded-full px-6 md:px-8 py-3 md:py-4 shadow-2xl backdrop-blur-xl border border-white/20">
+        <ul class="flex items-center space-x-4 md:space-x-8 text-xs md:text-sm font-semibold">
+          <li v-for="item in navItems" :key="item.id">
+            <a 
+              :href="`#${item.id}`" 
+              @click="scrollTo(item.id)"
+              class="relative text-white/80 hover:text-[#42b883] transition-all duration-300 hover:scale-110 transform group whitespace-nowrap"
+            >
+              {{ item.label }}
+              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#42b883] to-[#35495e] transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
 
       <!-- AI Chat Toggle Button -->
       <button
@@ -385,10 +385,10 @@ const audioElement = ref<HTMLAudioElement | null>(null)
 const musicLibrary = [
   {
     id: 1,
-    name: "Blinding Lights",
+    name: "Aku Dah Lupa",
     artist: "The Weeknd",
     album: "After Hours",
-    file: "/music/blinding-lights.mp3",
+    file: "~/assets/music/aku-dah-lupa.mp3",
     image: "/music-covers/after-hours.jpg"
   },
   {
