@@ -24,6 +24,25 @@
         </ul>
       </div>
 
+	<!-- Spotify Music Player Button -->
+	<button
+	  @click="toggleMusicPlayer"
+	  class="glass-enhanced w-12 h-12 md:w-14 md:h-14 rounded-full shadow-2xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-110 transform flex items-center justify-center group border border-white/20"
+	  :class="{ 'bg-gradient-to-r from-green-500 to-green-600': isMusicPlayerOpen, 'hover:bg-white/10': !isMusicPlayerOpen }"
+	  title="Music Player"
+	>
+	  <Icon 
+	    v-if="!isMusicPlayerOpen" 
+	    name="mdi:music" 
+	    class="w-6 h-6 md:w-7 md:h-7 text-white transition-transform duration-300 group-hover:scale-110"
+	  />
+	  <Icon 
+	    v-else 
+	    name="mdi:close" 
+	    class="w-6 h-6 md:w-7 md:h-7 text-white transition-transform duration-300"
+	  />
+	</button>
+
       <!-- AI Chat Toggle Button -->
       <button
         @click="toggleChat"
@@ -181,6 +200,164 @@
       </div>
     </div>
   </transition>
+<!-- Music Player Interface -->
+<transition 
+  name="music-popup" 
+  @after-enter="onMusicPlayerEnter" 
+  @after-leave="onMusicPlayerLeave"
+>
+  <div 
+    v-if="isMusicPlayerOpen"
+    class="fixed top-24 right-20 sm:right-24 z-[90] w-80 sm:w-96"
+  >
+    <!-- Music Player Window -->
+    <div 
+      class="bg-black/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+      style="transform: translateZ(0); will-change: transform, opacity;"
+    >
+      <!-- Player Header -->
+      <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <Icon name="mdi:music" class="w-6 h-6 text-white" />
+          <h3 class="text-white font-medium text-sm">Music Player</h3>
+          <div class="flex items-center space-x-1">
+            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse" v-if="isPlaying"></div>
+            <span class="text-white/90 text-xs">{{ isPlaying ? 'Playing' : 'Paused' }}</span>
+          </div>
+        </div>
+        <button 
+          @click="toggleMusicPlayer"
+          class="text-white/70 hover:text-white transition-colors duration-200 p-1 rounded-md hover:bg-white/10"
+        >
+          <Icon name="mdi:window-minimize" class="w-4 h-4" />
+        </button>
+      </div>
+
+      <!-- Current Track Info -->
+      <div class="px-4 py-4 border-b border-white/10">
+        <div class="flex items-center space-x-4">
+          <!-- Album Art -->
+          <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center overflow-hidden">
+            <img 
+              v-if="currentTrack.image" 
+              :src="currentTrack.image" 
+              :alt="currentTrack.name"
+              class="w-full h-full object-cover"
+            />
+            <Icon v-else name="mdi:music-note" class="w-8 h-8 text-white" />
+          </div>
+          
+          <!-- Track Details -->
+          <div class="flex-1 min-w-0">
+            <h4 class="text-white font-medium text-sm truncate">{{ currentTrack.name }}</h4>
+            <p class="text-white/70 text-xs truncate">{{ currentTrack.artist }}</p>
+            <p class="text-white/50 text-xs truncate">{{ currentTrack.album }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="px-4 py-3 border-b border-white/10">
+        <div class="flex items-center space-x-3 text-xs text-white/70">
+          <span>{{ formatTime(currentTime) }}</span>
+          <div class="flex-1 relative">
+            <div class="h-1 bg-white/20 rounded-full cursor-pointer" @click="seekTo">
+              <div 
+                class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-100 relative"
+                :style="{ width: progressPercentage + '%' }"
+              >
+                <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
+              </div>
+            </div>
+          </div>
+          <span>{{ formatTime(duration) }}</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="px-4 py-4">
+        <div class="flex items-center justify-center space-x-6">
+          <!-- Previous -->
+          <button 
+            @click="previousTrack"
+            class="text-white/70 hover:text-white transition-all duration-200 hover:scale-110"
+            :disabled="!audioElement"
+          >
+            <Icon name="mdi:skip-previous" class="w-6 h-6" />
+          </button>
+          
+          <!-- Play/Pause -->
+          <button 
+            @click="togglePlay"
+            class="bg-white text-black p-3 rounded-full hover:scale-110 transition-all duration-200 shadow-lg"
+            :disabled="!audioElement"
+          >
+            <Icon v-if="isPlaying" name="mdi:pause" class="w-6 h-6" />
+            <Icon v-else name="mdi:play" class="w-6 h-6" />
+          </button>
+          
+          <!-- Next -->
+          <button 
+            @click="nextTrack"
+            class="text-white/70 hover:text-white transition-all duration-200 hover:scale-110"
+            :disabled="!audioElement"
+          >
+            <Icon name="mdi:skip-next" class="w-6 h-6" />
+          </button>
+        </div>
+
+        <!-- Volume Control -->
+        <div class="flex items-center space-x-3 mt-4">
+          <Icon name="mdi:volume-low" class="w-5 h-5 text-white/70" />
+          <div class="flex-1 relative">
+            <div class="h-1 bg-white/20 rounded-full cursor-pointer" @click="setVolume">
+              <div 
+                class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full"
+                :style="{ width: volume + '%' }"
+              ></div>
+            </div>
+          </div>
+          <Icon name="mdi:volume-high" class="w-5 h-5 text-white/70" />
+        </div>
+      </div>
+
+      <!-- Queue/Playlist Preview -->
+      <div class="px-4 py-3 border-t border-white/10 max-h-32 overflow-y-auto">
+        <h5 class="text-white/70 text-xs font-medium mb-2 flex items-center">
+          <Icon name="mdi:playlist-music" class="w-4 h-4 mr-2" />
+          Up Next
+        </h5>
+        <div class="space-y-2">
+          <div 
+            v-for="track in upcomingTracks" 
+            :key="track.id"
+            class="flex items-center space-x-3 text-xs cursor-pointer hover:bg-white/5 p-2 rounded-lg transition-colors duration-200"
+            @click="playTrack(track)"
+          >
+            <div class="w-8 h-8 bg-white/10 rounded flex items-center justify-center">
+              <Icon name="mdi:music-note" class="w-4 h-4 text-white/70" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-white/80 truncate">{{ track.name }}</p>
+              <p class="text-white/50 truncate">{{ track.artist }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</transition>
+
+<!-- Audio Element (hidden) -->
+<audio 
+  ref="audioElement" 
+  @timeupdate="updateTime"
+  @ended="nextTrack"
+  @loadedmetadata="updateDuration"
+  @pause="onPause"
+  @play="onPlay"
+  preload="auto"
+></audio>
 </teleport>
 </template>
 
@@ -195,6 +372,191 @@ const navItems = ref([
   { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' }
 ])
+
+// Music Player state
+const isMusicPlayerOpen = ref(false)
+const isPlaying = ref(false)
+const currentTime = ref(0)
+const duration = ref(0)
+const volume = ref(75)
+const audioElement = ref<HTMLAudioElement | null>(null)
+
+// Sample music tracks (replace with your actual files)
+const musicLibrary = [
+  {
+    id: 1,
+    name: "Blinding Lights",
+    artist: "The Weeknd",
+    album: "After Hours",
+    file: "/music/blinding-lights.mp3",
+    image: "/music-covers/after-hours.jpg"
+  },
+  {
+    id: 2,
+    name: "Save Your Tears",
+    artist: "The Weeknd",
+    album: "After Hours",
+    file: "/music/save-your-tears.mp3",
+    image: "/music-covers/after-hours.jpg"
+  },
+  {
+    id: 3,
+    name: "Levitating",
+    artist: "Dua Lipa",
+    album: "Future Nostalgia",
+    file: "/music/levitating.mp3",
+    image: "/music-covers/future-nostalgia.jpg"
+  },
+  {
+    id: 4,
+    name: "Peaches",
+    artist: "Justin Bieber",
+    album: "Justice",
+    file: "/music/peaches.mp3",
+    image: "/music-covers/justice.jpg"
+  },
+  {
+    id: 5,
+    name: "Good 4 U",
+    artist: "Olivia Rodrigo",
+    album: "Sour",
+    file: "/music/good-4-u.mp3",
+    image: "/music-covers/sour.jpg"
+  }
+]
+
+// Initialize with first track and rest in queue
+const currentTrack = ref(musicLibrary[0])
+const upcomingTracks = ref([...musicLibrary.slice(1)])
+
+// Computed properties for player
+const progressPercentage = computed(() => {
+  return duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0
+})
+
+// Music player functions
+const toggleMusicPlayer = () => {
+  isMusicPlayerOpen.value = !isMusicPlayerOpen.value
+}
+
+const onMusicPlayerEnter = () => {
+  // Player opened
+}
+
+const onMusicPlayerLeave = () => {
+  // Player closed
+}
+
+const loadTrack = (track: typeof currentTrack.value) => {
+  if (!audioElement.value) return
+  
+  currentTrack.value = track
+  audioElement.value.src = track.file
+  audioElement.value.load()
+  
+  if (isPlaying.value) {
+    audioElement.value.play().catch(e => {
+      console.error("Playback failed:", e)
+      isPlaying.value = false
+    })
+  }
+}
+
+const togglePlay = () => {
+  if (!audioElement.value) return
+  
+  if (audioElement.value.paused) {
+    audioElement.value.play().then(() => {
+      isPlaying.value = true
+    }).catch(e => {
+      console.error("Playback failed:", e)
+      isPlaying.value = false
+    })
+  } else {
+    audioElement.value.pause()
+    isPlaying.value = false
+  }
+}
+
+const onPause = () => {
+  isPlaying.value = false
+}
+
+const onPlay = () => {
+  isPlaying.value = true
+}
+
+const updateTime = () => {
+  if (audioElement.value) {
+    currentTime.value = audioElement.value.currentTime
+  }
+}
+
+const updateDuration = () => {
+  if (audioElement.value) {
+    duration.value = audioElement.value.duration
+  }
+}
+
+const previousTrack = () => {
+  // For simplicity, just restart current track
+  if (audioElement.value) {
+    audioElement.value.currentTime = 0
+    currentTime.value = 0
+  }
+}
+
+const nextTrack = () => {
+  if (upcomingTracks.value.length > 0) {
+    const nextTrack = upcomingTracks.value.shift()
+    if (nextTrack) {
+      // Move current track to end of queue
+      upcomingTracks.value.push(currentTrack.value)
+      loadTrack(nextTrack)
+    }
+  }
+}
+
+const playTrack = (track: typeof currentTrack.value) => {
+  // Remove from queue and set as current
+  const index = upcomingTracks.value.findIndex(t => t.id === track.id)
+  if (index > -1) {
+    upcomingTracks.value.splice(index, 1)
+    upcomingTracks.value.push(currentTrack.value)
+    loadTrack(track)
+  }
+}
+
+const seekTo = (event: MouseEvent) => {
+  if (!audioElement.value) return
+  
+  const rect = (event.target as HTMLElement).getBoundingClientRect()
+  const clickX = event.clientX - rect.left
+  const percentage = clickX / rect.width
+  const seekTime = duration.value * percentage
+  
+  audioElement.value.currentTime = seekTime
+  currentTime.value = seekTime
+}
+
+const setVolume = (event: MouseEvent) => {
+  if (!audioElement.value) return
+  
+  const rect = (event.target as HTMLElement).getBoundingClientRect()
+  const clickX = event.clientX - rect.left
+  const percentage = (clickX / rect.width) * 100
+  const newVolume = Math.max(0, Math.min(1, percentage / 100))
+  
+  volume.value = percentage
+  audioElement.value.volume = newVolume
+}
+
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  return `${mins}:${secs.toString().padStart(2, '0')}`
+}
+
 
 // Chat state
 const isChatOpen = ref(false)
@@ -521,6 +883,10 @@ onMounted(() => {
   window.addEventListener('resize', updateResponsiveState, { passive: true })
   updateResponsiveState()
   loadChatHistory()
+  if (audioElement.value) {
+    audioElement.value.volume = volume.value / 100
+    audioElement.value.src = currentTrack.value.file
+  }
 })
 
 onUnmounted(() => {
@@ -528,6 +894,10 @@ onUnmounted(() => {
   window.removeEventListener('resize', updateResponsiveState)
   if (scrollTimeoutId) {
     cancelAnimationFrame(scrollTimeoutId)
+  }
+  if (audioElement.value) {
+    audioElement.value.pause()
+    audioElement.value.src = ''
   }
 })
 
@@ -763,6 +1133,25 @@ input:focus {
 /* Bubble Chat Style */
 .message-container:first-child .group:first-child {
   margin-top: 0;
+}
+
+/* Music Player Animations */
+.music-popup-enter-active {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.music-popup-leave-active {
+  transition: all 0.25s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+.music-popup-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+
+.music-popup-leave-to {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
 }
 
 /* Reduced Motion Support */

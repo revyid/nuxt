@@ -1,7 +1,7 @@
 {
-  "_hash": "vm_lvNAO7l6E19-yBjtLDJMPsynrwEYY-QImvSZ55i4",
+  "_hash": "NGEfxhdM5u0XjAGEustOjMXM9G7bAxox5jPBIDIobSE",
   "project": {
-    "rootDir": "/workspaces/nuxt"
+    "rootDir": "/workspaces/nuxt/landing"
   },
   "versions": {
     "nuxt": "3.17.5"
