@@ -80,7 +80,9 @@ export const useAuthStore = defineStore('auth', () => {
       const provider = new GoogleAuthProvider()
       await signInWithPopup($auth, provider)
     } catch (err: any) {
-      error.value = getErrorMessage(err.code)
+      if (err.code !== 'auth/popup-closed-by-user') {
+        error.value = getErrorMessage(err.code)
+      }
       throw err
     } finally {
       loading.value = false
@@ -99,7 +101,9 @@ export const useAuthStore = defineStore('auth', () => {
       const provider = new GithubAuthProvider()
       await signInWithPopup($auth, provider)
     } catch (err: any) {
-      error.value = getErrorMessage(err.code)
+      if (err.code !== 'auth/popup-closed-by-user') {
+        error.value = getErrorMessage(err.code)
+      }
       throw err
     } finally {
       loading.value = false
@@ -137,16 +141,23 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getErrorMessage = (code: string) => {
     const messages: Record<string, string> = {
-      'auth/user-not-found': 'Email tidak terdaftar',
-      'auth/wrong-password': 'Password salah',
-      'auth/email-already-in-use': 'Email sudah digunakan',
-      'auth/weak-password': 'Password terlalu lemah',
-      'auth/invalid-email': 'Format email tidak valid',
-      'auth/popup-closed-by-user': 'Login dibatalkan',
-      'auth/cancelled-popup-request': 'Popup dibatalkan',
-      'auth/popup-blocked': 'Popup diblokir browser'
+      'auth/user-not-found': '❌ Email belum terdaftar. Silakan daftar terlebih dahulu atau periksa kembali email Anda.',
+      'auth/wrong-password': '❌ Password salah. Periksa kembali password Anda atau gunakan fitur reset password.',
+      'auth/invalid-credential': '❌ Email atau password tidak valid. Periksa kembali data login Anda.',
+      'auth/email-already-in-use': '❌ Email sudah terdaftar. Silakan gunakan email lain atau login dengan email ini.',
+      'auth/weak-password': '❌ Password terlalu lemah. Gunakan minimal 6 karakter dengan kombinasi huruf dan angka.',
+      'auth/invalid-email': '❌ Format email tidak valid. Pastikan email Anda benar (contoh: nama@domain.com)',
+      'auth/too-many-requests': '⏳ Terlalu banyak percobaan login. Silakan tunggu beberapa menit sebelum mencoba lagi.',
+      'auth/network-request-failed': '🌐 Koneksi internet bermasalah. Periksa koneksi Anda dan coba lagi.',
+      'auth/popup-closed-by-user': '❌ Login dibatalkan. Silakan coba lagi untuk melanjutkan.',
+      'auth/cancelled-popup-request': '❌ Popup login dibatalkan. Refresh halaman dan coba lagi.',
+      'auth/popup-blocked': '🚫 Popup diblokir oleh browser. Izinkan popup untuk situs ini dan coba lagi.',
+      'auth/account-exists-with-different-credential': '⚠️ Akun sudah ada dengan metode login berbeda. Coba login dengan email/password.',
+      'auth/operation-not-allowed': '❌ Metode login ini tidak diizinkan. Hubungi administrator.',
+      'auth/user-disabled': '🔒 Akun Anda telah dinonaktifkan. Hubungi administrator untuk bantuan.',
+      'auth/requires-recent-login': '🔐 Silakan login ulang untuk melanjutkan operasi ini.'
     }
-    return messages[code] || 'Terjadi kesalahan, silakan coba lagi'
+    return messages[code] || '❌ Terjadi kesalahan tidak terduga. Silakan coba lagi atau hubungi support.'
   }
 
   return {
