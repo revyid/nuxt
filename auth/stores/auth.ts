@@ -19,6 +19,11 @@ export const useAuthStore = defineStore('auth', () => {
   const { $auth } = useNuxtApp()
 
   const initAuth = () => {
+    if (!$auth) {
+      error.value = 'Firebase Auth is not initialized'
+      return Promise.resolve(null)
+    }
+    
     return new Promise((resolve) => {
       onAuthStateChanged($auth, (authUser) => {
         user.value = authUser
@@ -28,6 +33,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const signIn = async (email: string, password: string) => {
+    if (!$auth) {
+      error.value = 'Firebase Auth is not initialized'
+      throw new Error('Firebase not configured')
+    }
+    
     try {
       loading.value = true
       error.value = ''
@@ -41,6 +51,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const signUp = async (email: string, password: string) => {
+    if (!$auth) {
+      error.value = 'Firebase Auth is not initialized'
+      throw new Error('Firebase not configured')
+    }
+    
     try {
       loading.value = true
       error.value = ''
@@ -54,6 +69,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const signInWithGoogle = async () => {
+    if (!$auth) {
+      error.value = 'Firebase Auth is not initialized'
+      throw new Error('Firebase not configured')
+    }
+    
     try {
       loading.value = true
       error.value = ''
@@ -68,6 +88,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const signInWithGithub = async () => {
+    if (!$auth) {
+      error.value = 'Firebase Auth is not initialized'
+      throw new Error('Firebase not configured')
+    }
+    
     try {
       loading.value = true
       error.value = ''
@@ -82,6 +107,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const resetPassword = async (email: string) => {
+    if (!$auth) {
+      error.value = 'Firebase Auth is not initialized'
+      throw new Error('Firebase not configured')
+    }
+    
     try {
       loading.value = true
       error.value = ''
@@ -95,6 +125,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const logout = async () => {
+    if (!$auth) return
+    
     try {
       await signOut($auth)
       user.value = null

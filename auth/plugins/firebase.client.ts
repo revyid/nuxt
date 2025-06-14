@@ -13,6 +13,16 @@ export default defineNuxtPlugin(() => {
     appId: config.public.firebaseAppId
   }
 
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'your_api_key_here') {
+    console.warn('Firebase configuration is missing or incomplete. Please check your .env file.')
+    return {
+      provide: {
+        firebase: null,
+        auth: null
+      }
+    }
+  }
+
   const app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
 
